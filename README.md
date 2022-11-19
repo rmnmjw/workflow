@@ -48,3 +48,6 @@ Add a shortcut for ´.\ahk\main.ahk´ to `Autostart`.
 
 ## 4. Registry
 Add all registry changes from `.\registry\`.
+
+## 5. Settings
+Copy settings from `.\settings` to corresponding software.

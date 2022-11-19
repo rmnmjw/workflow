@@ -1,0 +1,36 @@
+{
+    "workbench.colorTheme": "Default Dark+",
+    "files.exclude": {
+        "**/.husky": true,
+        "**/.quasar": true,
+        "**/example_mediaPath": true,
+        "**/example_resources": true,
+        "**/example_tempUploadPath": true,
+        "**/node_modules": true
+    },
+    "editor.mouseWheelZoom": true,
+    "window.title": "${rootName}",
+    "telemetry.telemetryLevel": "off",
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+
+    "i18n-ally.localesPaths": "src/i18n",
+    "i18n-ally.pathMatcher": "{locale}/index.{ext}",
+    "i18n-ally.includeSubfolders": true,
+    "i18n-ally.enabledFrameworks": [
+        "vue"
+    ],
+    "i18n-ally.enabledParsers": [
+        "json",
+    ],
+    "i18n-ally.keystyle": "nested",
+    "i18n-ally.indent": 4,
+    "i18n-ally.tabStyle": "space",
+    "i18n-ally.displayLanguage": "de-DE",
+    "editor.cursorBlinking": "smooth",
+    "workbench.tree.indent": 18,
+    "editor.quickSuggestionsDelay": 0,
+    "editor.showFoldingControls": "always"
+}
