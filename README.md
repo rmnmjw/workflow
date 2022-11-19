@@ -42,3 +42,8 @@ In this repo I collect all the things that I use to be productive. The following
 * [Ubuntu](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6?activetab=pivot:overviewtab)
 * [VcXsrv](https://sourceforge.net/projects/vcxsrv/)
 * [Visual Studio Code](https://code.visualstudio.com/)
+
+## 3. Run AutoHotKey on startup
+Add a shortcut for ´.\ahk\main.ahk´ to `Autostart`.
+
+## 4. Registry
