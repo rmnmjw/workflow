@@ -47,3 +47,4 @@ In this repo I collect all the things that I use to be productive. The following
 Add a shortcut for ´.\ahk\main.ahk´ to `Autostart`.
 
 ## 4. Registry
+Add all registry changes from `.\registry\`.
