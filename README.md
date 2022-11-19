@@ -2,16 +2,16 @@
 
 In this repo I collect all the things that I use to be productive. The following is meant to be an simple installation guide for setting up a new system.
 
-## 0. Install OS
+## 0. OS
 * [Windows 11](https://www.microsoft.com/de-de/software-download/windows11)
 
-## 1. Install Features
+## 1. Features
 * Bitlocker
 * Sandbox
 * WSL 2
     * [Kernel Update](https://learn.microsoft.com/de-de/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package)
     
-## 2. Install Software
+## 2. Software
 * [AltDrag](https://stefansundin.github.io/altdrag/)
 * [AutoHotKey](https://www.autohotkey.com/)
 * [Brave](https://brave.com/de/)
@@ -43,7 +43,7 @@ In this repo I collect all the things that I use to be productive. The following
 * [VcXsrv](https://sourceforge.net/projects/vcxsrv/)
 * [Visual Studio Code](https://code.visualstudio.com/)
 
-## 3. Run AutoHotKey on startup
+## 3. AutoHotKey
 Add a shortcut for ´.\ahk\main.ahk´ to `Autostart`.
 
 ## 4. Registry
