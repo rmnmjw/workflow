@@ -1,0 +1,5 @@
+@-moz-document domain("youtube.com") {
+.iv-branding {
+    display: none;
+}
+}

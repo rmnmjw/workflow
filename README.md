@@ -51,3 +51,6 @@ Add all registry changes from `.\registry\`.
 
 ## 5. Settings
 Copy settings from `.\settings` to corresponding software.
+
+## 6. Userstyles
+Import styles from `.\userstyles` to the Stylus extension.

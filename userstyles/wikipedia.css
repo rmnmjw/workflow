@@ -1,0 +1,188 @@
+@-moz-document domain("ru.wikipedia.org"), domain("de.wikipedia.org"), domain("en.wikipedia.org"), domain("en.wikibooks.org"), domain("nl.wikipedia.org"), domain("de.wiktionary.org"), domain("en.wiktionary.org") {
+:root{
+    --bg-color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root{
+        --bg-color: #181A1B;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #content {
+        top: 0px !important;
+    }
+}
+
+:target:before {
+    display: block;
+    margin-top: 20px;
+    content: "";
+}
+
+.firstHeading.mw-first-heading {
+    margin-top: 16px;
+}
+
+#p-logo,
+#mw-panel > * > h3,
+#p-lang li:not(.interwiki-en):not(.interwiki-de):not(.interwiki-ru):not(.interwiki-ja):not(.interwiki-nl)[class*=interwiki],
+#p-lang button,
+#p-wikibase-otherprojects,
+#p-lang .after-portlet,
+#n-mainpage-description,
+#n-topics,
+#n-Artikel-verbessern,
+#p-Mitmachen,
+#p-tb,
+#p-personal,
+#coll-create_a_book,
+#footer,
+#p-navigation > * > * > *:not(#n-randompage),
+#p-interaction,
+#p-participation,
+#left-navigation,
+#ca-view,
+#ca-edit,
+#ca-ve-edit,
+#ca-current,
+#ca-viewsource,
+#p-lang-label,
+#p-coll-print_export-label,
+.mw-editsection,
+#p-feedback,
+#p-visibility-label,
+#p-visibility
+{
+    display: none !important;
+}
+
+#ca-history > *,
+#p-cactions-label,
+#p-namespaces,
+#mw-panel .portal .body,
+#mw-page-base,
+#p-views {
+    background: var(--bg-color) !important;
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+#mw-head {
+    height: 0px;
+}
+
+#searchform {
+    display: block !important;
+    position: fixed;
+    top: -5px;
+    right: 0px;
+    z-index: 99999;
+    width: 189px;
+}
+
+#simpleSearch {
+    width: 187px !important;
+}
+
+#ca-history {
+    z-index: 99999;
+    background: unset !important;
+    border: unset !important;
+    position: fixed;
+    top: -8px;
+    right: 220px;
+    height: 14px;
+}
+
+#mw-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    width: 100%;
+    background: var(--bg-color);
+    border-bottom: 1px solid grey;
+}
+
+#mw-panel * {
+    float: left;
+}
+#mw-panel li:after {
+    content: '\00a0';
+}
+
+#mw-panel #p-logo + .portal {
+    margin-top: 0;
+}
+
+#left-navigation {
+    margin-left: 0;
+}
+
+#right-navigation {
+    margin-left: 1px;
+    float: left;
+    height: 0;
+    width: 0;
+}
+
+#content {
+    position: relative;
+    top: -40px;
+    padding-right: 16px !important;
+    padding-left: 16px !important;
+    margin-left: 0 !important;
+    border: none;
+}
+
+.mw-body {
+    padding: unset;
+}
+
+.badge-goodarticle, .badge-goodlist, .badge-recommendedarticle, .badge-featuredarticle, .badge-featuredlist {
+    list-style-image: unset !important;
+}
+
+@media only screen and (max-width: 800px) {
+    #ca-history {
+        top: 25px;
+    }
+    #content {
+        top: -26px;
+        left: 0 !important;
+        margin: 0;
+        margin-left: 0 !important;
+        padding-left: 10px;
+    }
+    #searchform {
+        top: 23px;
+    }
+    #mw-panel {
+        height: 68px;
+    }
+}
+
+/* remove annoying banner */
+#WMDE-Banner-Container
+{
+    display: none !important;
+}
+.mw-page-base
+{
+    padding-top: unset !important;
+}
+.mw-head,
+.mw-panel
+{
+    top: unset !important;
+}
+}
+
+@-moz-document url-prefix("https://en.wikibooks.org/wiki/") {
+#mw-panel, #mw-head {display: none;}
+}
