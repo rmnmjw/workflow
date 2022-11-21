@@ -303,12 +303,6 @@ CapsLock::return
         SetCapsLockState, AlwaysOff
         Critical, Off
     return
-    WheelLeft::
-        Critical, On
-        Send, {Media_Play_Pause}
-        SetCapsLockState, AlwaysOff
-        Critical, Off
-    return
 
 #IfWinActive, ahk_class CabinetWClass
     ^+m::explorer_create_new_file()
