@@ -19,6 +19,86 @@ SetCapsLockState, AlwaysOff
 SetNumlockState, AlwaysOn
 SetScrollLockState, AlwaysOff
 
+TEMP_FILE := A_Temp . "\autohotkey.ini"
+
+; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+;                                                               ; 
+;                          Screen Time                          ;
+;                                                               ; 
+; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+
+format_time(T) { ; based on https://www.autohotkey.com/boards/viewtopic.php?t=77420
+    Local H, M, HH, Q:=60, R:=3600
+    Return Format("{:02}:{:02}:{:02}", H:=T//R, M:=(T:=T-H*R)//Q, T-M*Q, HH:=H, HH*Q+M)
+}
+
+screen_time_varname := A_YYYY . A_MM . A_DD
+
+IniRead, screen_time_total, %TEMP_FILE%, screen_time, %screen_time_varname%, 0
+screen_time_start := -1
+screen_time_last_change := -1
+
+Gui, +AlwaysOnTop +ToolWindow -Caption +LastFound
+Gui, Font, s8L q4, Segoe UI
+Gui, +E0x02000000 +E0x00080000
+Gui, Add, Text, vScreenTime cFFFFFF, y200 x0 w100 h100
+Gui, Color, 211F23
+WinSet, TransColor, 211F23
+Gui, Show, x10 y2125 NoActivate
+Gui, Margin, 0, 0
+
+SetTimer, screen_time_periodic, 1000
+screen_time_periodic()
+screen_time_periodic(force_save:=false) {
+    global TEMP_FILE
+    global screen_time_total, screen_time_start, screen_time_last_change, screen_time_varname
+    static changes := false, counter := 0
+    
+    if (A_TimeIdlePhysical < 2000) {
+        if (screen_time_start == -1) {
+            screen_time_start := A_Now
+        }
+        screen_time_last_change := A_Now
+        changes := true
+    } else {
+        afk_delta := screen_time_last_change
+        EnvSub, afk_delta, %A_Now%, seconds
+        afk_delta := afk_delta * -1
+        
+        if (afk_delta >= 28 && screen_time_start != -1) {
+            EnvSub, screen_time_start, %A_Now%, seconds
+            screen_time_total += screen_time_start * -1
+            screen_time_start := -1
+            changes := true
+        }
+    }
+
+    if (screen_time_start != -1) {
+        current := screen_time_start
+        EnvSub, current, %A_Now%, seconds
+        current *= -1
+    } else {
+        current := 0
+    }
+ 
+    counter := Mod(counter + 1, 5)
+    if (changes && counter == 0 || force_save) {
+        screen_time_total += current
+        current := 0
+        if (screen_time_start != -1) {
+            screen_time_start := A_Now
+        }
+        IniWrite, %screen_time_total%, %TEMP_FILE%, screen_time, %screen_time_varname%
+        changes := false
+    }
+    
+    current_total := current + screen_time_total
+    
+    formatted := format_time(current_total)
+    GuiControl,, ScreenTime, %formatted%
+    Gui, +AlwaysOnTop
+}
+
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 ;                                                               ; 
 ;                            Startup                            ;
@@ -203,7 +283,10 @@ CapsLock::return
     #^Up::Run nircmd-x64/nircmd.exe changebrightness +10
     #^Down::Run nircmd-x64/nircmd.exe changebrightness -10
     
-    ~!^+r::Reload
+    ~!^+r::
+        screen_time_periodic(true)
+        Reload
+    Return
 
     !^+o::Run, explorer.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\AutoHotkey\Window Spy.lnk"
 
