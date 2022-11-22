@@ -33,10 +33,7 @@ format_time(T) { ; based on https://www.autohotkey.com/boards/viewtopic.php?t=77
 }
 
 screen_time_varname := A_YYYY . A_MM . A_DD
-
 IniRead, screen_time_total, %TEMP_FILE%, screen_time, %screen_time_varname%, 0
-screen_time_start := -1
-screen_time_last_change := -1
 
 Gui, +AlwaysOnTop +ToolWindow -Caption +LastFound
 Gui, Font, s8L q4, Segoe UI
@@ -51,8 +48,8 @@ SetTimer, screen_time_periodic, 1000
 screen_time_periodic()
 screen_time_periodic(force_save:=false) {
     global TEMP_FILE
-    global screen_time_total, screen_time_start, screen_time_last_change, screen_time_varname
-    static changes := false, counter := 0
+    global screen_time_total, screen_time_varname
+    static changes := false, counter := 0, screen_time_start := -1, screen_time_last_change := -1
     
     if (A_TimeIdlePhysical < 2000) {
         if (screen_time_start == -1) {
