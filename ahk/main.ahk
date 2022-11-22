@@ -41,7 +41,7 @@ Gui, +E0x02000000 +E0x00080000
 Gui, Add, Text, vScreenTime cFFFFFF, y200 x0 w100 h100
 Gui, Color, 211F23
 WinSet, TransColor, 211F23
-Gui, Show, x10 y2125 NoActivate
+Gui, Show, x9 y2123 NoActivate
 Gui, Margin, 0, 0
 
 SetTimer, screen_time_periodic, 1000
