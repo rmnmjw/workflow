@@ -69,14 +69,10 @@ screen_time_periodic(force_save:=false) {
         }
         screen_time_last_change := A_Now
         changes := true
-    } else {
-        afk_delta := time_diff_sec_abs(screen_time_last_change, A_Now)
-        
-        if (afk_delta >= 28 && screen_time_start != -1) {
-            screen_time_total += time_diff_sec_abs(screen_time_start, A_Now)
-            screen_time_start := -1
-            changes := true
-        }
+    } else if (A_TimeIdlePhysical >= 30000 && screen_time_start != -1) {
+        screen_time_total += time_diff_sec_abs(screen_time_start, A_Now)
+        screen_time_start := -1
+        changes := true
     }
 
     if (screen_time_start != -1) {
