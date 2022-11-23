@@ -27,7 +27,7 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
-format_time(T) { ; based on https://www.autohotkey.com/boards/viewtopic.php?t=77420
+time_format(T) { ; based on https://www.autohotkey.com/boards/viewtopic.php?t=77420
     Local H, M, HH, Q:=60, R:=3600
     Return Format("{:02}:{:02}:{:02}", H:=T//R, M:=(T:=T-H*R)//Q, T-M*Q, HH:=H, HH*Q+M)
 }
@@ -91,7 +91,7 @@ screen_time_periodic(force_save:=false) {
     
     current_total := current + screen_time_total
     
-    formatted := format_time(current_total)
+    formatted := time_format(current_total)
     GuiControl,, ScreenTime, %formatted%
     Gui, +AlwaysOnTop
 }
