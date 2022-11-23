@@ -23,7 +23,7 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 ;                                                               ; 
-;                          Screen Time                          ;
+;                         Time Functions                        ;
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
@@ -31,6 +31,18 @@ time_format(T) { ; based on https://www.autohotkey.com/boards/viewtopic.php?t=77
     Local H, M, HH, Q:=60, R:=3600
     Return Format("{:02}:{:02}:{:02}", H:=T//R, M:=(T:=T-H*R)//Q, T-M*Q, HH:=H, HH*Q+M)
 }
+
+time_diff_sec_abs(a, b:=false) {
+    EnvSub, a, %b%, seconds
+    return Abs(a)
+}
+
+; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+;                                                               ; 
+;                          Screen Time                          ;
+;                                                               ; 
+; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+
 
 screen_time_varname := A_YYYY . A_MM . A_DD
 IniRead, screen_time_total, %TEMP_FILE%, screen_time, %screen_time_varname%, 0
@@ -58,22 +70,17 @@ screen_time_periodic(force_save:=false) {
         screen_time_last_change := A_Now
         changes := true
     } else {
-        afk_delta := screen_time_last_change
-        EnvSub, afk_delta, %A_Now%, seconds
-        afk_delta := afk_delta * -1
+        afk_delta := time_diff_sec_abs(screen_time_last_change, A_Now)
         
         if (afk_delta >= 28 && screen_time_start != -1) {
-            EnvSub, screen_time_start, %A_Now%, seconds
-            screen_time_total += screen_time_start * -1
+            screen_time_total += time_diff_sec_abs(screen_time_start, A_Now)
             screen_time_start := -1
             changes := true
         }
     }
 
     if (screen_time_start != -1) {
-        current := screen_time_start
-        EnvSub, current, %A_Now%, seconds
-        current *= -1
+        current := time_diff_sec_abs(screen_time_start, A_Now)
     } else {
         current := 0
     }
