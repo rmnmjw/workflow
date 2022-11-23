@@ -61,13 +61,12 @@ screen_time_periodic()
 screen_time_periodic(force_save:=false) {
     global TEMP_FILE
     global screen_time_total, screen_time_varname
-    static changes := false, counter := 0, screen_time_start := -1, screen_time_last_change := -1
+    static changes := false, counter := 0, screen_time_start := -1
     
     if (A_TimeIdlePhysical < 2000) {
         if (screen_time_start == -1) {
             screen_time_start := A_Now
         }
-        screen_time_last_change := A_Now
         changes := true
     } else if (A_TimeIdlePhysical >= 30000 && screen_time_start != -1) {
         screen_time_total += time_diff_sec_abs(screen_time_start, A_Now)
