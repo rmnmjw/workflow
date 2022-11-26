@@ -84,7 +84,7 @@ screen_time_periodic(force_save:=false) {
         current := 0
     }
  
-    counter := Mod(counter + 1, 5)
+    counter := Mod(counter + 1, 15)
     if (changes && counter == 0 || force_save) {
         screen_time_total += current
         current := 0
