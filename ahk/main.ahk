@@ -270,7 +270,7 @@ CapsLock::return
 
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
-    !^+a::Winset, Alwaysontop, , A
+    ; !^+a::Winset, Alwaysontop, , A
     
     !^+d::Send, %A_YYYY%-%A_MM%-%A_DD%
     !^+t::Send, %A_Hour%:%A_Min%
