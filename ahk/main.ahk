@@ -50,11 +50,11 @@ IniRead, screen_time_total, %TEMP_FILE%, screen_time, %screen_time_varname%, 0
 Gui, +AlwaysOnTop +ToolWindow -Caption +LastFound
 Gui, Font, s8L q4, Segoe UI
 Gui, +E0x02000000 +E0x00080000
-Gui, Add, Text, vScreenTime cFFFFFF, y200 x0 w100 h100
+Gui, Margin, 32, 16
+Gui, Add, Text, vScreenTime cFFFFFF, x100 y30
 Gui, Color, 211F23
 WinSet, TransColor, 211F23
-Gui, Show, x9 y2123 NoActivate
-Gui, Margin, 0, 0
+Gui, Show, x0 y2113 h47 NoActivate
 
 SetTimer, screen_time_periodic, 1000
 screen_time_periodic()
@@ -92,6 +92,18 @@ screen_time_periodic(force_save:=false) {
     }
     
     current_total := current + screen_time_total
+    
+    hours_today := current_total / 3600
+    if (hours_today > 10) {
+        if (Mod(current_total, 2) == 0) {
+            Gui, Font, vScreenTime +c000000
+            Gui, Color, d20000
+            WinSet, TransColor, f92472
+        } else {
+            Gui, Color, 211F23
+            WinSet, TransColor, 211F23
+        }
+    }
     
     formatted := time_format(current_total)
     GuiControl,, ScreenTime, %formatted%
