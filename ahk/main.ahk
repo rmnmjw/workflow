@@ -45,6 +45,10 @@ time_diff_sec_abs(a, b:=false) {
 
 
 screen_time_varname := A_YYYY . A_MM . A_DD
+if (A_Hour < 4) {
+    screen_time_varname -= 1
+}
+
 IniRead, screen_time_total, %TEMP_FILE%, screen_time, %screen_time_varname%, 0
 
 Gui, +AlwaysOnTop +ToolWindow -Caption +LastFound
