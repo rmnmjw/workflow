@@ -60,6 +60,22 @@ Gui, Color, 211F23
 WinSet, TransColor, 211F23
 Gui, Show, x0 y2113 h47 NoActivate
 
+SetTimer, screen_time_hide_on_full_screen, 1000
+screen_time_hide_on_full_screen() {
+    static is_hidden := false
+    
+    WinGetPos, wx, wy, ww, wh, A
+    fs := wx == 0 && wy == 0 && ww == 3840 && wh == 2160
+
+    if (fs && !is_hidden) {
+        Gui, Hide
+        is_hidden := true
+    } else if (!fs && is_hidden) {
+        Gui, Show, NoActivate
+        is_hidden := false
+    }
+}
+
 SetTimer, screen_time_periodic, 1000
 screen_time_periodic()
 screen_time_periodic(force_save:=false) {
