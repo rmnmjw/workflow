@@ -24,8 +24,13 @@ SetTimer, screen_time_hide_on_full_screen, 1000
 screen_time_hide_on_full_screen() {
     static is_hidden := false
     
-    WinGetPos, wx, wy, ww, wh, A
-    fs := wx == 0 && wy == 0 && ww == 3840 && wh == 2160
+    WinGetClass, clazz, A
+    if ("Progman" == clazz) {
+        fs := false
+    } else {
+        WinGetPos, wx, wy, ww, wh, A
+        fs := wx == 0 && wy == 0 && ww == 3840 && wh == 2160
+    }
 
     if (fs && !is_hidden) {
         Gui, Hide
