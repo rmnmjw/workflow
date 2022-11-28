@@ -53,9 +53,6 @@ CapsLock::return
 
     !^+ä::explorer_restart()
     
-    #^Up::Run nircmd-x64/nircmd.exe changebrightness +10
-    #^Down::Run nircmd-x64/nircmd.exe changebrightness -10
-    
     ~!^+r::
         screen_time_periodic(true)
         Reload
