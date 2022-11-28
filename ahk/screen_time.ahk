@@ -11,14 +11,15 @@ if (A_Hour < 4) {
 
 IniRead, screen_time_total, %TEMP_FILE%, screen_time, %screen_time_varname%, 0
 
-Gui, +AlwaysOnTop +ToolWindow -Caption +LastFound
-Gui, Font, s8L q4, Segoe UI
-Gui, +E0x02000000 +E0x00080000
-Gui, Margin, 32, 16
-Gui, Add, Text, vScreenTime cFFFFFF, x100 y30
-Gui, Color, 211F23
+
+Gui, screen_time:+AlwaysOnTop +ToolWindow -Caption +LastFound
+Gui, screen_time:Font, s8L q4, Segoe UI
+Gui, screen_time:+E0x02000000 +E0x00080000
+Gui, screen_time:Margin, 32, 16
+Gui, screen_time:Add, Text, vScreenTime cFFFFFF, 99:99:99
+Gui, screen_time:Color, 211F23
 WinSet, TransColor, 211F23
-Gui, Show, x0 y2113 h47 NoActivate
+Gui, screen_time:Show, x0 y2113 h47 NoActivate
 
 SetTimer, screen_time_hide_on_full_screen, 1000
 screen_time_hide_on_full_screen() {
@@ -33,10 +34,10 @@ screen_time_hide_on_full_screen() {
     }
 
     if (fs && !is_hidden) {
-        Gui, Hide
+        Gui, screen_time:Hide
         is_hidden := true
     } else if (!fs && is_hidden) {
-        Gui, Show, NoActivate
+        Gui, screen_time:Show, NoActivate
         is_hidden := false
     }
 }
@@ -81,16 +82,16 @@ screen_time_periodic(force_save:=false) {
     hours_today := current_total / 3600
     if (hours_today > 10) {
         if (Mod(current_total, 2) == 0) {
-            Gui, Font, vScreenTime +c000000
-            Gui, Color, d20000
+            Gui, screen_time:Font, vScreenTime +c000000
+            Gui, screen_time:Color, d20000
             WinSet, TransColor, f92472
         } else {
-            Gui, Color, 211F23
+            Gui, screen_time:Color, 211F23
             WinSet, TransColor, 211F23
         }
     }
     
     formatted := time_format(current_total)
-    GuiControl,, ScreenTime, %formatted%
-    Gui, +AlwaysOnTop
+    GuiControl,screen_time:, ScreenTime, %formatted%
+    Gui, screen_time:+AlwaysOnTop
 }
