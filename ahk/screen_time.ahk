@@ -21,6 +21,9 @@ Gui, screen_time:Color, 211F23
 WinSet, TransColor, 211F23
 Gui, screen_time:Show, x0 y2113 h47 NoActivate
 
+Gui, screen_time_bg:+ToolWindow -Caption +LastFound
+Gui, screen_time_bg:Color, d20000
+
 SetTimer, screen_time_hide_on_full_screen, 1000
 screen_time_hide_on_full_screen() {
     static is_hidden := false
@@ -85,6 +88,7 @@ screen_time_periodic(force_save:=false) {
             Gui, screen_time:Font, vScreenTime +c000000
             Gui, screen_time:Color, d20000
             WinSet, TransColor, f92472
+            Gui, screen_time_bg:Show, x0 y2113 h47 w107 NoActivate
         } else {
             Gui, screen_time:Color, 211F23
             WinSet, TransColor, 211F23
