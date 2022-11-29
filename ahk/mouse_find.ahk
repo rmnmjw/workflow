@@ -4,14 +4,12 @@
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
-mouse_find_target := 32
 mouse_find_size := 32
 mouse_find_large() {
-    global mouse_find_size, mouse_find_target
+    global mouse_find_size
+    SetTimer, mouse_find_small, Delete
+    SetTimer, mouse_find_small, 1000
     while (mouse_find_size < 256) {
-        if (mouse_find_target != 256) {
-            return
-        }
         mouse_find_size += 16
         
         DllCall("SystemParametersInfo", "Int", 0x2029, "Int", 0, "Ptr", mouse_find_size, "Int", 0x01) ; https://www.autohotkey.com/boards/viewtopic.php?t=100911
@@ -22,9 +20,6 @@ mouse_find_large() {
 mouse_find_small() {
     global mouse_find_size, mouse_find_target
     while (mouse_find_size > 32) {
-        if (mouse_find_target != 32) {
-            return
-        }
         mouse_find_size -= 16
         DllCall("SystemParametersInfo", "Int", 0x2029, "Int", 0, "Ptr", mouse_find_size, "Int", 0x01) ; https://www.autohotkey.com/boards/viewtopic.php?t=100911
         Sleep, 1
@@ -87,8 +82,6 @@ mouse_find_timer() {
     }
     
     if (distanceTravelled < 800) {
-        mouse_find_target := 32
-        SetTimer, mouse_find_small, -1
         return
     }
     
