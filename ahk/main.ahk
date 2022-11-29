@@ -27,6 +27,7 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 #include _explorer_functions.ahk
 
 #include screen_time.ahk
+#include mouse_find.ahk
 #include startup_actions.ahk
 #include timers.ahk
 
