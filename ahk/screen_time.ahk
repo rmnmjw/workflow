@@ -29,7 +29,7 @@ screen_time_hide_on_full_screen() {
     static is_hidden := false
     
     WinGetClass, clazz, A
-    if ("Progman" == clazz) {
+    if ("Progman" == clazz || "WorkerW" == clazz) {
         fs := false
     } else {
         WinGetPos, wx, wy, ww, wh, A
