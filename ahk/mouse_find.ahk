@@ -81,17 +81,15 @@ mouse_find_timer() {
         maxY := Max(currentY, maxY)
     }
     
-    if (distanceTravelled < 800) {
-        return
-    }
-    
-    rectangleWidth := maxX - minX
-    rectangleHeight := maxY - minY
-    diagonal := Sqrt(rectangleWidth * rectangleWidth + rectangleHeight * rectangleHeight)
-
-    if (diagonal > 0 && distanceTravelled / diagonal > 2.5) {
-        mouse_find_target := 256
-        SetTimer, mouse_find_large, -1
+    if (distanceTravelled >= 800) {
+        rectangleWidth := maxX - minX
+        rectangleHeight := maxY - minY
+        diagonal := Sqrt(rectangleWidth * rectangleWidth + rectangleHeight * rectangleHeight)
+        
+        if (diagonal > 0 && distanceTravelled / diagonal > 2.5) {
+            mouse_find_target := 256
+            SetTimer, mouse_find_large, -1
+        }
     }
     
     indexLast := index
