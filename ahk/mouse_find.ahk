@@ -8,7 +8,7 @@ mouse_find_size := 32
 mouse_find_large() {
     global mouse_find_size
     SetTimer, mouse_find_small, Delete
-    SetTimer, mouse_find_small, 1000
+    SetTimer, mouse_find_small, 350
     while (mouse_find_size < 256) {
         mouse_find_size += 16
         
@@ -36,7 +36,7 @@ mouse_find_pos_default() {
     MouseGetPos, mx, my
     return {x: mx, y: my}
 }
-SetTimer, mouse_find_timer, 100
+SetTimer, mouse_find_timer, 50
 mouse_find_timer() {
     global mouse_find_target
     static LEN := 7
@@ -81,7 +81,7 @@ mouse_find_timer() {
         maxY := Max(currentY, maxY)
     }
     
-    if (distanceTravelled >= 800) {
+    if (distanceTravelled >= 1000) {
         rectangleWidth := maxX - minX
         rectangleHeight := maxY - minY
         diagonal := Sqrt(rectangleWidth * rectangleWidth + rectangleHeight * rectangleHeight)
