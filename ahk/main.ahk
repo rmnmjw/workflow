@@ -65,8 +65,9 @@ CapsLock::return
     #t::Run, explorer.exe "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.15.2875.0_x64__8wekyb3d8bbwe\wt.exe"
     
     #q::window_to_bottom_and_activate_topmost()
-    #w::minimize_current_window()
-    #^d::restore_all_windows()
+    #w::return
+    ; #w::minimize_current_window()
+    ; #^d::restore_all_windows()
     ~#d::
         WinSet, Top,, ahk_class HwndWrapper[RetroBar;;295ed828-7f71-4f84-8552-fbf81fe5f314]
     return
