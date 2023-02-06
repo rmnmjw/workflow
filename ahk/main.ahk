@@ -67,6 +67,9 @@ CapsLock::return
     #q::window_to_bottom_and_activate_topmost()
     #w::minimize_current_window()
     #^d::restore_all_windows()
+    ~#d::
+        WinSet, Top,, ahk_class HwndWrapper[RetroBar;;295ed828-7f71-4f84-8552-fbf81fe5f314]
+    return
     
     #c::return
     
