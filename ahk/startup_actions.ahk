@@ -30,5 +30,5 @@ startup_refresh_taskbar_icons() {
 }
 
 startup_restart_alt_drag()
-startup_restart_rbtray()
+; startup_restart_rbtray()
 startup_refresh_taskbar_icons()
