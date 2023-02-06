@@ -26,7 +26,7 @@ startup_refresh_taskbar_icons() {
             PostMessage, 0x200,0,% ((hight-h) >> 16)+width-w,ToolbarWindow321, AHK_class NotifyIconOverflowWindow
         }
     }
-    DetectHiddenWindows, %A_DetectHiddenWindows%
+    DetectHiddenWindows, %tmp_DetectHiddenWindows%
 }
 
 startup_restart_alt_drag()
