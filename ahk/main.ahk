@@ -27,8 +27,8 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 #include _text_functions.ahk
 #include _explorer_functions.ahk
 
-#include screen_time.ahk
-#include mouse_find.ahk
+; #include screen_time.ahk
+; #include mouse_find.ahk
 #include startup_actions.ahk
 #include timers.ahk
 
@@ -56,7 +56,7 @@ CapsLock::return
     !^+ä::explorer_restart()
     
     ~!^+r::
-        screen_time_periodic(true)
+        ; screen_time_periodic(true)
         Reload
     Return
 
