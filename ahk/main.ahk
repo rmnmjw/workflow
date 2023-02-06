@@ -7,6 +7,7 @@ if (!A_IsAdmin)
 ListLines Off ; Displays the script lines most recently executed.
 SetBatchLines -1 ; Determines how fast a script will run (affects CPU utilization).
 #MaxHotkeysPerInterval 800
+DetectHiddenWindows, Off
 CoordMode, Mouse, Screen
 SendMode Input
 SetTitleMatchMode, 2
