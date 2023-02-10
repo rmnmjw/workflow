@@ -4,20 +4,13 @@
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
-startup_restart_alt_drag() {
+SetTimer, restart_programs, -1
+restart_programs() {
     Process, Close, AltDrag.exe
-    EnvGet, OutputVar, LOCALAPPDATA
-    Run, % OutputVar . "\..\Roaming\AltDrag\AltDrag.exe -multi"
-}
-
-startup_restart_rbtray() {
     Process, Close, RBTray.exe
-    Run, explorer.exe C:\dev\rbtray\x64\RBTray.exe
-}
+    Process, Close, RetroBar.exe
 
-startup_refresh_taskbar_icons() {
     ; www.autohotkey.com/board/topic/33849-refreshtray/?p=410313
-    tmp_DetectHiddenWindows := A_DetectHiddenWindows
     DetectHiddenWindows, On
     ControlGetPos,,,w,h,ToolbarWindow321, AHK_class NotifyIconOverflowWindow
     width:=w, hight:=h
@@ -26,9 +19,12 @@ startup_refresh_taskbar_icons() {
             PostMessage, 0x200,0,% ((hight-h) >> 16)+width-w,ToolbarWindow321, AHK_class NotifyIconOverflowWindow
         }
     }
-    DetectHiddenWindows, %tmp_DetectHiddenWindows%
-}
+    DetectHiddenWindows, Off
 
-startup_restart_alt_drag()
-; startup_restart_rbtray()
-startup_refresh_taskbar_icons()
+    Run, explorer.exe C:\dev\rbtray\x64\RBTray.exe
+
+    EnvGet, OutputVar, LOCALAPPDATA
+    Run, % OutputVar . "\..\Roaming\AltDrag\AltDrag.exe -multi"
+
+    Run, explorer.exe C:\Program Files\RetroBar\RetroBar.exe
+}
