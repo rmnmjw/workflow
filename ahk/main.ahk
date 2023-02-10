@@ -226,17 +226,25 @@ CapsLock::return
 #if !GetKeyState("CapsLock", "P") and (WinActive("ahk_exe 7zFM.exe")
  or WinActive("ahk_exe Taskmgr.exe")
  or WinActive("ahk_class Photo_Lightweight_Viewer"))
-    Esc::
-    ^W::
-        Send !{f4}
-    return
+    Esc::Send !{f4}
+    ^W::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe cmd.exe")
-    ^W::
-        Send !{f4}
-    return
+    ^W::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class WorkerW ahk_exe explorer.exe")
     F1::Return
+
+#if !GetKeyState("CapsLock", "P") and WinActive("Uhr ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
+    ^W::Send !{f4}
+
+#if !GetKeyState("CapsLock", "P") and WinActive("Einstellungen ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
+    ^W::Send !{f4}
+
+#if !GetKeyState("CapsLock", "P") and WinActive("Microsoft Store ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
+    ^W::Send !{f4}
+
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS ahk_exe WindowsTerminal.exe")
+    ^W::Send ^+W
 
 #IfWinActive
