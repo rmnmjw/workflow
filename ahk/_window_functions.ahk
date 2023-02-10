@@ -76,5 +76,7 @@ window_to_bottom_and_activate_topmost() {
     }
     
     WinActivate, ahk_id %WinUID% 
+    WinWaitActive, ahk_id %WinUID% 
+    
     Critical, Off
 }
