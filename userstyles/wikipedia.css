@@ -1,4 +1,4 @@
-@-moz-document domain("ru.wikipedia.org"), domain("de.wikipedia.org"), domain("en.wikipedia.org"), domain("en.wikibooks.org"), domain("nl.wikipedia.org"), domain("de.wiktionary.org"), domain("en.wiktionary.org") {
+@-moz-document regexp("^https://[a-z]+\\.wiki[pm]edia\\.org/.*$") {
 :root{
     --bg-color: white;
 }
