@@ -54,6 +54,8 @@
 #p-feedback,
 #p-visibility-label,
 #p-visibility
+, #ca-watch
+, #p-cactions
 {
     display: none !important;
 }
@@ -181,8 +183,4 @@ body {
 {
     top: unset !important;
 }
-}
-
-@-moz-document url-prefix("https://en.wikibooks.org/wiki/") {
-#mw-panel, #mw-head {display: none;}
 }
