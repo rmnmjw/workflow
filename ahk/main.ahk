@@ -69,7 +69,11 @@ CapsLock::return
     ; #w::minimize_current_window()
     ; #^d::restore_all_windows()
     ~#d::
-        WinSet, Top,, ahk_class HwndWrapper[RetroBar;;295ed828-7f71-4f84-8552-fbf81fe5f314]
+        Critical, On
+        DetectHiddenWindows, On
+        WinSet, Top,, ahk_exe RetroBar.exe
+        DetectHiddenWindows, Off
+        Critical, Off
     return
     
     #c::return
