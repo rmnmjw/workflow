@@ -73,6 +73,8 @@ CapsLock::return
     return
     
     #c::return
+    #.::return
+    
     
     <^>!a::Send, α
     <^>!b::Send, β
