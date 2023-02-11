@@ -308,5 +308,14 @@ CapsLock::return
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class PX_WINDOW_CLASS ahk_exe sublime_merge.exe")
     ^W::Send !{f4}
+    
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class Chrome_WidgetWin_1 ahk_exe Qobuz.exe")
+    ^W::Send !{f4}
+    
+#if !GetKeyState("CapsLock", "P") and WinActive("Window Spy ahk_exe AutoHotkey.exe")
+    ^W::Send !{f4}
+
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class Chrome_WidgetWin_0 ahk_exe Spotify.exe")
+    ^W::Send !{f4}
 
 #IfWinActive
