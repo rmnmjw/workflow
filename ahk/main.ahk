@@ -32,6 +32,36 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 #include startup_actions.ahk
 #include timers.ahk
 
+class TurboPaste {
+    static buffer := {}
+    
+    copy(key) {
+        Critical, On
+            tmp := Clipboard
+                Send, {Ctrl down}c{Ctrl up}
+                Sleep, 50
+                TurboPaste.buffer[key] := Clipboard
+            Clipboard := tmp
+        Critical, Off
+        
+        copied := TurboPaste.buffer[key]
+        TrayTip , TurboPaste: Copy into Buffer [ %key% ], %copied%, 1, 17
+    }
+    
+    paste(key) {
+        Critical, On
+            tmp := Clipboard
+                Clipboard := TurboPaste.buffer[key]
+                Send, {Ctrl down}v{Ctrl up}
+                Sleep, 50
+            Clipboard := tmp
+        Critical, Off
+        
+        pasted := TurboPaste.buffer[key]
+        TrayTip , TurboPaste: Paste from Buffer [ %key% ], %pasted%, 1, 17
+    }
+}
+
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 ; ;                                                               ; ;
@@ -46,6 +76,17 @@ CapsLock::return
 
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
+    #1::TurboPaste.paste(1)
+    #2::TurboPaste.paste(2)
+    #3::TurboPaste.paste(3)
+    #4::TurboPaste.paste(4)
+    #5::TurboPaste.paste(5)
+    #6::TurboPaste.paste(6)
+    #7::TurboPaste.paste(7)
+    #8::TurboPaste.paste(8)
+    #9::TurboPaste.paste(9)
+    #0::TurboPaste.paste(0)
+
     ; !^+a::Winset, Alwaysontop, , A
     
     !^+d::Send, %A_YYYY%-%A_MM%-%A_DD%
@@ -144,6 +185,18 @@ CapsLock::return
 
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
+    
+    #1::TurboPaste.copy(1)
+    #2::TurboPaste.copy(2)
+    #3::TurboPaste.copy(3)
+    #4::TurboPaste.copy(4)
+    #5::TurboPaste.copy(5)
+    #6::TurboPaste.copy(6)
+    #7::TurboPaste.copy(7)
+    #8::TurboPaste.copy(8)
+    #9::TurboPaste.copy(9)
+    #0::TurboPaste.copy(0)
+    
     q::Send, @
     7::Send, {{}
     8::Send, [
