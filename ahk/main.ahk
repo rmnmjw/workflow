@@ -306,4 +306,7 @@ CapsLock::return
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS ahk_exe WindowsTerminal.exe")
     ^W::Send ^+W
 
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class PX_WINDOW_CLASS ahk_exe sublime_merge.exe")
+    ^W::Send !{f4}
+
 #IfWinActive
