@@ -45,7 +45,7 @@ window_to_bottom_and_activate_topmost() {
     }
     
 
-    if (c == "MozillaWindowClass" && x == "ahk_exe thunderbird.exe") {
+    if (c == "MozillaWindowClass" && x == "thunderbird.exe") {
         WinMinimize, A
     } else {
         WinSet, Bottom, , A
