@@ -14,7 +14,7 @@ SetTitleMatchMode, 2
 SetWorkingDir %A_ScriptDir%
 SetWinDelay, 0
 
-Menu, Tray, Icon, icon.ico
+Menu, Tray, Icon, icon.png
 
 SetCapsLockState, AlwaysOff
 SetNumlockState, AlwaysOn
