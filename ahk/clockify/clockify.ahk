@@ -12,10 +12,6 @@ SetTitleMatchMode, 2
 SetWorkingDir %A_ScriptDir%
 SetWinDelay, 0
 
-SetCapsLockState, AlwaysOff
-SetNumlockState, AlwaysOn
-SetScrollLockState, AlwaysOff
-
 OnExit("ExitFunc")
 
 Menu, Tray, Icon, clockify.png
