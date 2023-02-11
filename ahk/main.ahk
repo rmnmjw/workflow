@@ -76,6 +76,15 @@ CapsLock::return
 
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
+    ~LButton::
+        MouseGetPos, x, y, id
+        WinGet, exe, ProcessName, ahk_id %id%
+        if (exe != "RetroBar.exe" || x < 3838) {
+            return
+        }
+        Send, {RWin down}d{RWin up}
+    return
+
     #1::TurboPaste.paste(1)
     #2::TurboPaste.paste(2)
     #3::TurboPaste.paste(3)
