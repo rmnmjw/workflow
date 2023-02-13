@@ -330,4 +330,34 @@ CapsLock::return
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe thunderbird.exe")
     ^W::window_to_bottom_and_activate_topmost()
     
+#if !GetKeyState("CapsLock", "P") and WinActive("Medienwiedergabe ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
+    ^W::Send !{f4}
+    
+    j::
+        Send, {Ctrl down}{Shift down}j{Shift up}{Ctrl up}
+        TrayTip, Media Playback [ 1x ], 1x, 1, 17
+    return
+    
+    k::
+        Send, {Ctrl down}{Shift down}k{Shift up}{Ctrl up}
+        TrayTip, Media Playback [ 1.5x ], 1.5x, 1, 17
+    return
+    
+    l::
+        Send, {Ctrl down}{Shift down}l{Shift up}{Ctrl up}
+        TrayTip, Media Playback [ 2x ], 2x, 1, 17
+    return
+    
+    f::Send, {F11}
+    
+    A::
+    Left::
+        Send, {Ctrl down}{Left}{Ctrl up}
+    return
+    
+    D::
+    Right::
+        Send, {Ctrl down}{Right}{Ctrl up}
+    return
+
 #IfWinActive
