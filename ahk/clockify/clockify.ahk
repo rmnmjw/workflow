@@ -52,11 +52,11 @@ class Clockify {
     }
     
     launch() {
-        if (Clockify.counter == 0) {
-            Clockify.counter := 10
+        if (Clockify.counter > 0) {
+            Clockify.counter -= 1
             return
         }
-        Clockify.counter -= 1
+        Clockify.counter := 3
         Run, "C:\Program Files\BraveSoftware\Brave-Browser\Application\chrome_proxy.exe"  --profile-directory=Default --app-id=lajdaimcbbobmkjbgilfjekkpnhmekoi
     }
     
