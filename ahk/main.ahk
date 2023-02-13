@@ -327,4 +327,7 @@ CapsLock::return
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class Chrome_WidgetWin_0 ahk_exe Spotify.exe")
     ^W::Send !{f4}
 
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe thunderbird.exe")
+    ^W::window_to_bottom_and_activate_topmost()
+    
 #IfWinActive
