@@ -97,7 +97,7 @@ class Clockify {
 
 Clockify.update()
 
-SetTimer, timer, 500
+SetTimer, timer, 1000
 timer() {
     global Clockify
     Clockify.update()
