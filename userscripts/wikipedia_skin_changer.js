@@ -18,6 +18,8 @@
         if (url.searchParams.get('useskin') !== SKIN) {
             url.searchParams.set('useskin', SKIN);
             document.location.href = url.href;
+        } else {
+            window.history.replaceState(null, document.title, document.location.href.replace(/\?useskin=vector$/, ''))
         }
     }
 
