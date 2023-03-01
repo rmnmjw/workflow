@@ -1,0 +1,25 @@
+{
+
+	"i":   { "prefix": "i",   "body": "import "},
+	"f":   { "prefix": "f",   "body": "from "},
+
+	"c":   { "prefix": "c",   "body": "const "},
+	"cr":  { "prefix": "cr",  "body": "const result = "},
+	"rr":  { "prefix": "rr",  "body": "return result;"},
+	"r":   { "prefix": "r",  "body": "return $1;"},
+
+	"l":   { "prefix": "l",   "body": "($1) => {\n\t$2\n} "},
+
+	"ed":  { "prefix": "ed",  "body": "export default "},
+
+	"p":   { "prefix": "p",   "body": "console.log($1)" },
+	"pr":  { "prefix": "pr",  "body": "console.log(\"result\", result)" },
+	"ü":   { "prefix": "ü",   "body": "console.log(\"$1\", $1)" },
+
+	"cl":  { "prefix": "cl",  "body": "console.log('\\n'.repeat(100))"},
+	"x":   { "prefix": "x",   "body": "process.exit();"},
+
+	"w":   { "prefix": "w",   "body": "await "},
+	"s":   { "prefix": "s",   "body": "async "},
+
+}
