@@ -354,69 +354,6 @@ CapsLock::return
     
     #c::return
     #.::return
-    
-    
-    <^>!a::Send, α
-    <^>!b::Send, β
-    <^>!g::Send, γ
-    <^>!d::Send, δ
-    <^>!e::Send, ε
-    <^>!z::Send, ζ
-    <^>!ä::Send, η
-    <^>!f::Send, θ
-    <^>!k::Send, κ
-    <^>!l::Send, λ
-    <^>!m::Send, μ
-    <^>!n::Send, ν
-    <^>!x::Send, ξ
-    <^>!p::Send, π
-    <^>!r::Send, ρ
-    <^>!s::Send, σ
-    <^>!t::Send, τ
-    <^>!y::Send, υ
-    <^>!v::Send, φ
-    <^>!h::Send, χ
-    <^>!i::Send, ψ
-    <^>!o::Send, ω
-
-    +<^>!a::Send, Α
-    +<^>!b::Send, Β
-    +<^>!g::Send, Γ
-    +<^>!d::Send, Δ
-    +<^>!e::Send, Ε
-    +<^>!z::Send, Ζ
-    +<^>!ä::Send, Η
-    +<^>!f::Send, Θ
-    +<^>!k::Send, Κ
-    +<^>!l::Send, Λ
-    +<^>!m::Send, Μ
-    +<^>!n::Send, Ν
-    +<^>!x::Send, Ξ
-    +<^>!p::Send, Π
-    +<^>!r::Send, Ρ
-    +<^>!s::Send, Σ
-    +<^>!t::Send, Τ
-    +<^>!y::Send, Υ
-    +<^>!v::Send, Φ
-    +<^>!h::Send, Χ
-    +<^>!i::Send, Ψ
-    +<^>!o::Send, Ω
-    
-    <^>!Numpad0::Send, │
-    <^>!Numpad1::Send, └
-    <^>!Numpad2::Send, ┴
-    <^>!Numpad3::Send, ┘
-    <^>!Numpad4::Send, ├
-    <^>!Numpad5::Send, ┼
-    <^>!Numpad6::Send, ┤
-    <^>!Numpad7::Send, ┌
-    <^>!Numpad8::Send, ┬
-    <^>!Numpad9::Send, ┐
-    <^>!NumpadSub::Send, ─
-    
-#If GetKeyState("ScrollLock", "P")
-    WheelUp::Send, {WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}
-    WheelDown::Send, {WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}
 
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
@@ -457,6 +394,10 @@ CapsLock::return
         Critical, Off
     return
 
+#If GetKeyState("ScrollLock", "P")
+    WheelUp::Send, {WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}
+    WheelDown::Send, {WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}
+    
 #IfWinActive, ahk_class CabinetWClass
     ^+m::explorer_create_new_file()
 
@@ -609,4 +550,64 @@ CapsLock::return
         Send, {Ctrl down}{Right}{Ctrl up}
     return
 
+#If !GetKeyState("CapsLock", "P")
+
+    <^>!a::Send, α
+    <^>!b::Send, β
+    <^>!g::Send, γ
+    <^>!d::Send, δ
+    <^>!e::Send, ε
+    <^>!z::Send, ζ
+    <^>!ä::Send, η
+    <^>!f::Send, θ
+    <^>!k::Send, κ
+    <^>!l::Send, λ
+    <^>!m::Send, μ
+    <^>!n::Send, ν
+    <^>!x::Send, ξ
+    <^>!p::Send, π
+    <^>!r::Send, ρ
+    <^>!s::Send, σ
+    <^>!t::Send, τ
+    <^>!y::Send, υ
+    <^>!v::Send, φ
+    <^>!h::Send, χ
+    <^>!i::Send, ψ
+    <^>!o::Send, ω
+
+    +<^>!a::Send, Α
+    +<^>!b::Send, Β
+    +<^>!g::Send, Γ
+    +<^>!d::Send, Δ
+    +<^>!e::Send, Ε
+    +<^>!z::Send, Ζ
+    +<^>!ä::Send, Η
+    +<^>!f::Send, Θ
+    +<^>!k::Send, Κ
+    +<^>!l::Send, Λ
+    +<^>!m::Send, Μ
+    +<^>!n::Send, Ν
+    +<^>!x::Send, Ξ
+    +<^>!p::Send, Π
+    +<^>!r::Send, Ρ
+    +<^>!s::Send, Σ
+    +<^>!t::Send, Τ
+    +<^>!y::Send, Υ
+    +<^>!v::Send, Φ
+    +<^>!h::Send, Χ
+    +<^>!i::Send, Ψ
+    +<^>!o::Send, Ω
+    
+    <^>!Numpad0::Send, │
+    <^>!Numpad1::Send, └
+    <^>!Numpad2::Send, ┴
+    <^>!Numpad3::Send, ┘
+    <^>!Numpad4::Send, ├
+    <^>!Numpad5::Send, ┼
+    <^>!Numpad6::Send, ┤
+    <^>!Numpad7::Send, ┌
+    <^>!Numpad8::Send, ┬
+    <^>!Numpad9::Send, ┐
+    <^>!NumpadSub::Send, ─
+    
 #IfWinActive
