@@ -112,7 +112,11 @@ CapsLock::return
 
     !^+o::Run, explorer.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\AutoHotkey\Window Spy.lnk"
 
-    #t::Run, explorer.exe "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.15.2875.0_x64__8wekyb3d8bbwe\wt.exe"
+    ; #t::Run, explorer.exe "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.15.2875.0_x64__8wekyb3d8bbwe\wt.exe"
+    #t::
+        path := "C:\Users\" . A_UserName
+        Run, PowerShell.exe -noexit -command Set-Location -literalPath '%path%'
+    Return
     
     #q::window_to_bottom_and_activate_topmost()
     #w::return
