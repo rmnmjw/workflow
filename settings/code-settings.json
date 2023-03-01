@@ -1,5 +1,4 @@
 {
-    "workbench.colorTheme": "Default Dark+",
     "files.exclude": {
         "**/.husky": true,
         "**/.quasar": true,
@@ -11,11 +10,9 @@
     "editor.mouseWheelZoom": true,
     "window.title": "${rootName}",
     "telemetry.telemetryLevel": "off",
-
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     },
-
     "i18n-ally.localesPaths": "src/i18n",
     "i18n-ally.pathMatcher": "{locale}/index.{ext}",
     "i18n-ally.includeSubfolders": true,
@@ -32,5 +29,22 @@
     "editor.cursorBlinking": "smooth",
     "workbench.tree.indent": 18,
     "editor.quickSuggestionsDelay": 0,
-    "editor.showFoldingControls": "always"
+    "editor.showFoldingControls": "always",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.quickSuggestions": {
+        "other": "off"
+    },
+    "gitlens.telemetry.enabled": false,
+    "eslint.format.enable": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "workbench.colorTheme": "Default Light+",
+    "files.eol": "\n",
+    "editor.minimap.showSlider": "always",
+    "editor.minimap.side": "right",
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.suggestOnTriggerCharacters": false,
+    "workbench.sideBar.location": "right",
+    "search.quickOpen.includeHistory": false
 }
