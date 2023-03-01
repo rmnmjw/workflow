@@ -14,8 +14,8 @@
     const SKIN = 'vector';
 
     {
-        const url = new URL(document.location.href);
-        if (url.searchParams.get('useskin') !== SKIN) {
+        if (!document.body.classList.contains('skin-vector-legacy')) {
+            const url = new URL(document.location.href);
             url.searchParams.set('useskin', SKIN);
             document.location.href = url.href;
         } else {
