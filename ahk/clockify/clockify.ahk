@@ -26,6 +26,8 @@ class Clockify {
     static counter := 0
     static last_title := ""
     
+    static init := True
+    
     open() {
         WinRestore, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
         WinShow, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
@@ -57,7 +59,14 @@ class Clockify {
             return
         }
         Clockify.counter := 3
+        Clockify.init := true
         Run, "C:\Program Files\BraveSoftware\Brave-Browser\Application\chrome_proxy.exe"  --profile-directory=Default --app-id=lajdaimcbbobmkjbgilfjekkpnhmekoi
+        if (Clockify.init) {
+            Clockify.init := false
+            WinWait, Clockify
+            Sleep, 1000
+            Clockify.toggle()
+        }
     }
     
     update() {
