@@ -345,6 +345,17 @@ CapsLock::return
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe thunderbird.exe")
     ^W::window_to_bottom_and_activate_topmost()
+
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe powershell.exe")
+    ^W::
+        Send, {Alt down}
+        Sleep, 10
+        Send, {Space}
+        Sleep, 10
+        Send, {Alt up}
+        Sleep, 10
+        Send, S
+    Return
     
 #if !GetKeyState("CapsLock", "P") and WinActive("Medienwiedergabe ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
     ^W::Send !{f4}
