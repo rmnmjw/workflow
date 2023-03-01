@@ -196,6 +196,50 @@ explorer_create_new_file() {
 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 ;                                                               ; 
+;                             Volume                            ;
+;                                                               ; 
+; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+
+vol_show_shown := false
+vol_hide() {
+    global vol_show_shown
+    SetTimer, vol_hide, Off
+    Critical, On
+        RunWait, "C:\Program Files (x86)\HideVolumeOSD\HideVolumeOSD.exe" -hide
+        vol_show_shown := false
+    Critical, Off
+}
+
+vol_show() {
+    global vol_show_shown
+    SetTimer, vol_hide, Off
+    if (!vol_show_shown) {
+        Critical, On
+            vol_show_shown := true
+            RunWait, "C:\Program Files (x86)\HideVolumeOSD\HideVolumeOSD.exe" -show
+        Critical, Off
+    }
+    SetTimer, vol_hide, 300
+}
+
+vol_up(){
+    vol_show()
+    Send, {Volume_Up}
+    SetCapsLockState, AlwaysOff
+}
+
+vol_down() {
+    vol_show()
+    Send, {Volume_Down}
+    SetCapsLockState, AlwaysOff
+}
+
+
+
+
+
+; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+;                                                               ; 
 ;                            Startup                            ;
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
@@ -205,6 +249,9 @@ restart_programs() {
     Process, Close, AltDrag.exe
     ; Process, Close, RBTray.exe
     ; Process, Close, RetroBar.exe
+    
+    Process, Close, HideVolumeOSD.exe
+    vol_hide()
 
     ; www.autohotkey.com/board/topic/33849-refreshtray/?p=410313
     DetectHiddenWindows, On
@@ -383,18 +430,8 @@ CapsLock::return
     PrintScreen::Send, {PrintScreen}
     NumPadDot::Send, .
 
-    WheelUp::
-        Critical, On
-        Send, {Volume_Up}
-        SetCapsLockState, AlwaysOff
-        Critical, Off
-    return
-    WheelDown::
-        Critical, On
-        Send, {Volume_Down}
-        SetCapsLockState, AlwaysOff
-        Critical, Off
-    return
+    WheelUp::vol_up()
+    WheelDown::vol_down()
 
 #If GetKeyState("ScrollLock", "P")
     WheelUp::Send, {WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}
