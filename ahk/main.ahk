@@ -545,8 +545,8 @@ CapsLock::return
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class MSPaintApp ahk_exe mspaint.exe")
     ^W::Send !{f4}
 
-#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe thunderbird.exe")
-    ^W::window_to_bottom_and_activate_topmost()
+; #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe thunderbird.exe")
+;     ^W::window_to_bottom_and_activate_topmost()
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe powershell.exe")
     ^W::
