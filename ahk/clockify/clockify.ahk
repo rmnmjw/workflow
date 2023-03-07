@@ -130,3 +130,8 @@ ExitFunc(ExitReason, ExitCode) {
     WinRestore, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
     Sleep, 100
 }
+
+#if !GetKeyState("CapsLock", "P") and WinActive("Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+    ^W::Clockify.close()
+    
+#IfWinActive
