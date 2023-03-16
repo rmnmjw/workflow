@@ -401,7 +401,7 @@ CapsLock::return
         Critical, Off
     return
     
-    #c::return
+    #c::Send, {LWin down}{LAlt down}d{LAlt up}{LWin up}
     #.::return
     
     
