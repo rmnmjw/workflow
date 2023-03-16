@@ -37,7 +37,6 @@
     "gitlens.telemetry.enabled": false,
     "eslint.format.enable": true,
     "javascript.updateImportsOnFileMove.enabled": "always",
-    "workbench.colorTheme": "Default Light+",
     "files.eol": "\n",
     "editor.minimap.showSlider": "always",
     "editor.minimap.side": "right",
@@ -45,6 +44,6 @@
     "editor.autoClosingQuotes": "never",
     "editor.acceptSuggestionOnCommitCharacter": false,
     "editor.suggestOnTriggerCharacters": false,
-    "workbench.sideBar.location": "right",
-    "search.quickOpen.includeHistory": false
+    "search.quickOpen.includeHistory": false,
+    "window.autoDetectColorScheme": true,
 }
