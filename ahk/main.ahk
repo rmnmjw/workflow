@@ -403,6 +403,11 @@ CapsLock::return
     
     #c::return
     #.::return
+    
+    
+    
+    !^+Up::vol_up()
+    !^+Down::vol_down()
 
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
