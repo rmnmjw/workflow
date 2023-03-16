@@ -563,6 +563,9 @@ CapsLock::return
         Sleep, 10
         Send, S
     Return
+
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe ubuntu.exe")
+    ^W::WinClose
     
 #if !GetKeyState("CapsLock", "P") and WinActive("Medienwiedergabe ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
     ^W::Send !{f4}
