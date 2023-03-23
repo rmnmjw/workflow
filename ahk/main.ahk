@@ -52,6 +52,12 @@ time_diff_sec_abs(a, b:=false) {
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
+; https://www.autohotkey.com/boards/viewtopic.php?f=6&t=62701
+window_toggle_app_mode() {
+    RegRead, appMode, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme
+    RegWrite, REG_DWORD, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme, % !appMode
+}
+
 restore_all_windows() {
     WinGet, WindowList, List
     loop %WindowList% {
@@ -375,6 +381,8 @@ CapsLock::return
     !^+w::enter_random_string(10)
 
     !^+ä::explorer_restart()
+    
+    !^+.::window_toggle_app_mode()
     
     ~!^+r::
         ; screen_time_periodic(true)
