@@ -52,10 +52,28 @@ time_diff_sec_abs(a, b:=false) {
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
+WALLPAPER_LIGHT := "C:\Users\rmn\Pictures\wallpaper\wp_win89_fixed_x2_v2_4k.png"
+WALLPAPER_DARK  := "C:\Users\rmn\Pictures\wallpaper\night.png"
+wallpaper_set(light) {
+    global WALLPAPER_LIGHT, WALLPAPER_DARK
+    if (light) {
+        path := WALLPAPER_LIGHT
+    } else {
+        path := WALLPAPER_DARK
+    }
+    RegWrite, REG_SZ, HKEY_CURRENT_USER, Control Panel\Desktop, Wallpaper, %path%
+    loop, 20 {
+        RunWait, %A_WinDir%\System32\RUNDLL32.EXE user32.dll`,UpdatePerUserSystemParameters
+        Sleep, 100
+    }    
+}
+
+
 ; https://www.autohotkey.com/boards/viewtopic.php?f=6&t=62701
 window_toggle_app_mode() {
     RegRead, appMode, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme
     RegWrite, REG_DWORD, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme, % !appMode
+    wallpaper_set(!appMode)
 }
 
 restore_all_windows() {
