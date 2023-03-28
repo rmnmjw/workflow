@@ -52,7 +52,7 @@ time_diff_sec_abs(a, b:=false) {
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
-WALLPAPER_LIGHT := "C:\Users\rmn\Pictures\wallpaper\wp_win89_fixed_x2_v2_4k.png"
+WALLPAPER_LIGHT := "C:\Users\rmn\Pictures\wallpaper\crxb103kq5.jpg"
 WALLPAPER_DARK  := "C:\Users\rmn\Pictures\wallpaper\night.png"
 wallpaper_set(light) {
     global WALLPAPER_LIGHT, WALLPAPER_DARK
