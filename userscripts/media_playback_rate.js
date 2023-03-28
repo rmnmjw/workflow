@@ -33,7 +33,22 @@
         }, 300);
     }
 
+    let down_control = false;
+
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'Control') {
+            down_control = false;
+        }
+    });
+
     document.addEventListener('keydown', (e) => {
+        if (e.key === 'Control') {
+            down_control = true;
+            return;
+        }
+        if (down_control) {
+            return;
+        }
         if (e.key !== '+' && e.key !== '-') {
             return;
         }
