@@ -186,10 +186,8 @@ enter_random_string(len) {
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
 explorer_restart() {
-    RunWait taskkill /F /IM TaskbarX.exe
     RunWait taskkill /F /IM explorer.exe
     RunWait explorer.exe
-    RunWait C:\Program Files\taskbarX\TaskbarX.exe -cib=1
 }
 
 
@@ -298,8 +296,6 @@ restart_programs() {
     Run, % OutputVar . "\..\Roaming\AltDrag\AltDrag.exe -multi"
 
     ; Run, explorer.exe C:\Program Files\RetroBar\RetroBar.exe
-    
-    RunWait C:\Program Files\taskbarX\TaskbarX.exe -cib=1
 }
 
 
