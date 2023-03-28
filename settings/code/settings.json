@@ -5,7 +5,8 @@
         "**/example_mediaPath": true,
         "**/example_resources": true,
         "**/example_tempUploadPath": true,
-        "**/node_modules": true
+        "**/node_modules": true,
+        "**/dist": true
     },
     "editor.mouseWheelZoom": true,
     "window.title": "${rootName}",
@@ -46,4 +47,10 @@
     "editor.suggestOnTriggerCharacters": false,
     "search.quickOpen.includeHistory": false,
     "window.autoDetectColorScheme": true,
+    "sonarlint.disableTelemetry": true,
+    "terminal.integrated.persistentSessionReviveProcess": "never",
+    "terminal.integrated.enablePersistentSessions": false,
+    "workbench.colorTheme": "Default Light+",
+    "editor.autoClosingDelete": "never",
+    "editor.autoClosingOvertype": "never",
 }
