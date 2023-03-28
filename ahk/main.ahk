@@ -408,9 +408,9 @@ CapsLock::return
         Run, PowerShell.exe -noexit -command Set-Location -literalPath '%path%'
     Return
     
-    #q::window_to_bottom_and_activate_topmost()
+    ; #q::window_to_bottom_and_activate_topmost()
+    #q::minimize_current_window()
     #w::return
-    ; #w::minimize_current_window()
     ; #^d::restore_all_windows()
     ~#d::
         Critical, On
