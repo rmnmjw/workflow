@@ -464,6 +464,9 @@ CapsLock::return
 #IfWinActive, ahk_class CabinetWClass
     ^+m::explorer_create_new_file()
 
+#IfWinActive, ahk_class SunAwtFrame ahk_exe idea64.exe
+    :*:val ::var 
+
 #IfWinActive, ahk_class PX_WINDOW_CLASS ahk_exe sublime_text.exe
     NumPadDot::Send, .
 
