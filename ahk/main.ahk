@@ -509,8 +509,8 @@ CapsLock::return
     Q::Send {LControl down}{LShift down}{-}{LShift up}{LControl up}
     E::Send {LControl down}{LShift down}{+}{LShift up}{LControl up}
     ^W::Send !{f4}
-    XButton1::Send {Left}
-    XButton2::Send {Right}
+    ; XButton1::Send {Left}
+    ; XButton2::Send {Right}
 
 #If !GetKeyState("CapsLock", "P") and WinActive("ahk_class Photo_Lightweight_Viewer")
     A::Send {Left}
