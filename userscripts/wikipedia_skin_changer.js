@@ -28,7 +28,7 @@
     let c = treeWalker.currentNode;
 
     while (c) {
-        if (c.nodeName !== 'A' || c.href.trim() === '') {
+        if (c.nodeName !== 'A' || c.href.trim() === '' || c.hash.length !== 0) {
             c = treeWalker.nextNode();
             continue;
         }
