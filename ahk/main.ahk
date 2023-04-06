@@ -165,19 +165,24 @@ window_to_bottom_and_activate_topmost() {
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
 ; https://www.autohotkey.com/boards/viewtopic.php?t=76052
-enter_random_string(len) {
-    symbols := "0123456789abcdefghijklmnopqrstuvwxyz"
+generate_random_of(chars, len) {
     output  := ""
     loop, %len% {
-        Random, r, 1, StrLen(symbols)
-        output .= SubStr(symbols, r, 1)
+        Random, r, 1, StrLen(chars)
+        output .= SubStr(chars, r, 1)
     }
+    return output
+}
+
+enter_random_string(len) {
+    output  := generate_random_of("0123456789abcdefghijklmnopqrstuvwxyz", len)
     Send, %output%
 }
 
-
-
-
+enter_random_number(len) {
+    output := generate_random_of("0123456789", len)
+    Send, %output%
+}
 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 ;                                                               ; 
@@ -390,6 +395,8 @@ CapsLock::return
     !^+t::Send, %A_Hour%:%A_Min%
     
     !^+w::enter_random_string(10)
+    !^+s::enter_random_number(1)
+    
 
     !^+ä::explorer_restart()
     
