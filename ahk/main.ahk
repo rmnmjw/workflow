@@ -408,7 +408,11 @@ desktop_set_icon() {
     ico := desktop_get_current_desktop() +1
     Menu, Tray, Icon, nums/%ico%.ico
 }
-desktop_set_icon()
+
+SetTimer, desktop_refresh_number, 500
+desktop_refresh_number() { 
+    desktop_set_icon()
+}
 
 desktop_last := 0
 desktop_go_to(num) {
