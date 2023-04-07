@@ -370,24 +370,119 @@ class TurboPaste {
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 
+
+
+desktop_get_current_desktop()
+{
+    RegRead, cur, HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\SessionInfo\1\VirtualDesktops, CurrentVirtualDesktop
+    RegRead, total, HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops, VirtualDesktopIDs
+    return floor(InStr(total,cur) / 32)
+}
+
+activate_foremost_window() {    
+    WinGet, WindowList, List 
+    to_activate = -1
+    Loop %WindowList% { 
+        WinUID := WindowList%A_Index% 
+        
+        WinGet, mini_maxi, MinMax, ahk_id %WinUID%
+        if (mini_maxi == -1) {
+            continue
+        }
+        WinGetTitle, WinTitle, ahk_id %WinUID%
+        if (WinTitle == "" or WinTitle == "remap_keys.ahk") {
+            continue
+        }
+        
+        to_activate := WinUID
+        break
+    }
+    if (to_activate == -1) {
+        return
+    }
+    WinActivate, ahk_id %to_activate%
+}
+
+
+desktop_set_icon() {
+    ico := desktop_get_current_desktop() +1
+    Menu, Tray, Icon, nums/%ico%.ico
+}
+desktop_set_icon()
+
+desktop_last := 0
+desktop_go_to(num) {
+    Critical, On
+    global desktop_names, show_desktop_name_num, desktop_last
+    current := desktop_get_current_desktop()
+    
+    if (num < 0) {
+        num := 11
+    }
+    if (num > 11) {
+        num := 0
+    }
+    
+    show_desktop_name_num := num
+    RunWait, DesktopSwitcher.exe %num%, , hide
+    
+    
+    SetTimer, desktop_set_icon, -1
+    SetTimer, activate_foremost_window, -1
+    
+    if (desktop_last != current) {
+        desktop_last := current
+    }
+    Critical, Off
+}
+
+desktop_go_to_prev() {
+    Critical, On
+    desktop_go_to(desktop_get_current_desktop() - 1)
+    Critical, Off
+}
+desktop_go_to_next() {
+    Critical, On
+    desktop_go_to(desktop_get_current_desktop() + 1)
+    Critical, Off
+}
+
+
 #^Tab::Send, {LWin down}{Tab}{LWin up}
-#Tab::Return
+; #Tab::Return
 CapsLock::return
 
 
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
+    #^::desktop_go_to(desktop_last)
+    #1::desktop_go_to(0)
+    #2::desktop_go_to(1)
+    #3::desktop_go_to(2)
+    #4::desktop_go_to(3)
+    #5::desktop_go_to(4)
+    #6::desktop_go_to(5)
+    #7::desktop_go_to(6)
+    #8::desktop_go_to(7)
+    #9::desktop_go_to(8)
+    #0::desktop_go_to(9)
+    #ß::desktop_go_to(10)
+    #´::desktop_go_to(11)
     
-    #1::TurboPaste.paste(1)
-    #2::TurboPaste.paste(2)
-    #3::TurboPaste.paste(3)
-    #4::TurboPaste.paste(4)
-    #5::TurboPaste.paste(5)
-    #6::TurboPaste.paste(6)
-    #7::TurboPaste.paste(7)
-    #8::TurboPaste.paste(8)
-    #9::TurboPaste.paste(9)
-    #0::TurboPaste.paste(0)
+    #^Left::desktop_go_to_prev()
+    #^Right::desktop_go_to_next()
+
+
+    #Numpad0::TurboPaste.paste(0)
+    #Numpad1::TurboPaste.paste(1)
+    #Numpad2::TurboPaste.paste(2)
+    #Numpad3::TurboPaste.paste(3)
+    #Numpad4::TurboPaste.paste(4)
+    #Numpad5::TurboPaste.paste(5)
+    #Numpad6::TurboPaste.paste(6)
+    #Numpad7::TurboPaste.paste(7)
+    #Numpad8::TurboPaste.paste(8)
+    #Numpad9::TurboPaste.paste(9)
 
     !^+a::Winset, Alwaysontop, , A
     
@@ -438,16 +533,16 @@ CapsLock::return
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
     
-    #1::TurboPaste.copy(1)
-    #2::TurboPaste.copy(2)
-    #3::TurboPaste.copy(3)
-    #4::TurboPaste.copy(4)
-    #5::TurboPaste.copy(5)
-    #6::TurboPaste.copy(6)
-    #7::TurboPaste.copy(7)
-    #8::TurboPaste.copy(8)
-    #9::TurboPaste.copy(9)
-    #0::TurboPaste.copy(0)
+    #Numpad0::TurboPaste.copy(0)
+    #Numpad1::TurboPaste.copy(1)
+    #Numpad2::TurboPaste.copy(2)
+    #Numpad3::TurboPaste.copy(3)
+    #Numpad4::TurboPaste.copy(4)
+    #Numpad5::TurboPaste.copy(5)
+    #Numpad6::TurboPaste.copy(6)
+    #Numpad7::TurboPaste.copy(7)
+    #Numpad8::TurboPaste.copy(8)
+    #Numpad9::TurboPaste.copy(9)
     
     q::Send, @
     7::Send, {{}
