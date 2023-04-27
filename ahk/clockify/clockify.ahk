@@ -22,6 +22,8 @@ Menu, Tray, Default, Open Clockify
 
 class Clockify {
     
+    static TO_TRAY := true
+    
     static running := False
     static counter := 0
     static last_title := ""
@@ -30,13 +32,17 @@ class Clockify {
     
     open() {
         WinRestore, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
-        WinShow, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+        if (Clockify.TO_TRAY) {
+            WinShow, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+        }
         WinActivate, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
     }
     
     close() {
         WinMinimize, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
-        WinHide, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+        if (Clockify.TO_TRAY) {
+            WinHide, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+        }
     }
     
     toggle() {
@@ -96,9 +102,11 @@ class Clockify {
             Clockify.last_title := t
         }
         
-        WinGet WinState, MinMax, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
-        if (WinState == -1) {
-            WinHide, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+        if (Clockify.TO_TRAY) {
+            WinGet WinState, MinMax, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+            if (WinState == -1) {
+                WinHide, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+            }
         }
     }
     
@@ -121,13 +129,17 @@ timer() {
         Sleep, 100
         WinMinimize, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
     }
-    ; WinShow, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+    if (Clockify.TO_TRAY) {
+        WinShow, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+    }
     Reload
 Return
 
 
 ExitFunc(ExitReason, ExitCode) {
-    WinRestore, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+    if (Clockify.TO_TRAY) {
+        WinRestore, Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+    }
     Sleep, 100
 }
 
