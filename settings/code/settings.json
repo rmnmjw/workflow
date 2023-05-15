@@ -50,7 +50,20 @@
     "sonarlint.disableTelemetry": true,
     "terminal.integrated.persistentSessionReviveProcess": "never",
     "terminal.integrated.enablePersistentSessions": false,
-    "workbench.colorTheme": "Default Light+",
     "editor.autoClosingDelete": "never",
     "editor.autoClosingOvertype": "never",
+    "editor.codeLens": false,
+    "mssql.objectExplorer.groupBySchema": false,
+    "sonarlint.rules": {
+        "javascript:S3776": {
+            "level": "off"
+        }
+    },
+    "workbench.sideBar.location": "right",
+    "workbench.list.smoothScrolling": true,
+    "editor.smoothScrolling": true,
+    "terminal.integrated.smoothScrolling": true,
+    "window.zoomLevel": 1,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": false,
 }

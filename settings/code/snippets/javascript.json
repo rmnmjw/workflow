@@ -12,14 +12,39 @@
 
 	"ed":  { "prefix": "ed",  "body": "export default "},
 
-	"p":   { "prefix": "p",   "body": "console.log($1)" },
-	"pr":  { "prefix": "pr",  "body": "console.log(\"result\", result)" },
-	"ü":   { "prefix": "ü",   "body": "console.log(\"$1\", $1)" },
+	// "p":   { "prefix": "p",   "body": "console.log($1)" },
+	// "ü":   { "prefix": "ü",   "body": "console.log(`$1`, $1)" },
 
-	"cl":  { "prefix": "cl",  "body": "console.log('\\n'.repeat(100))"},
+	"p":   { "prefix": "p",   "body": "(async () => {\n\tconst log = (await import('common/src/helpers/debugLog.js')).default;\n\tlog($1);\n})();" },
+	"ü":   { "prefix": "ü",   "body": "(async () => {\n\tconst log = (await import('common/src/helpers/debugLog.js')).default;\n\tlog(`$1`, $1);\n})();" },
+
+
+	// "dl":   { "prefix": "dl",   "body": "import debugLog from 'common/src/helpers/debugLog.js';" },
+		
+	// "pp":   { "prefix": "pp",   "body": "debugLog($1)" },
+	// "üü":   { "prefix": "üü",   "body": "debugLog(`$1`, $1)" },
+	
+
+
+	"cl":  { "prefix": "cl",  "body": "console.log(`\\n`.repeat(100))"},
 	"x":   { "prefix": "x",   "body": "process.exit();"},
 
 	"w":   { "prefix": "w",   "body": "await "},
 	"s":   { "prefix": "s",   "body": "async "},
+
+	"tne": { "prefix": "tne", "body": "throw new Error(`$1`);"},
+
+	
+	"w1": { "prefix": "w1", "body": "watch($1, () => {\n\t(async () => {\n\t\tconst log = (await import('common/src/helpers/debugLog.js')).default;\n\t\tlog(`$1`, $1);\n\t})();\n}, {immediate: true});"},
+	"w2": { "prefix": "w2", "body": "watch($1, () => {\n\t(async () => {\n\t\tconst log = (await import('common/src/helpers/debugLog.js')).default;\n\t\tlog(`$1`, $1);\n\t})();\n}, {immediate: true});"},
+
+	"importpipe": { "prefix": "importpipe", "body": "import {pipe} from 'common/src/helpers/functional.js';"},
+	"importplain": { "prefix": "importplain", "body": "import plain from '../../helpers/plain.js';"},
+	// "id": { "prefix": "id", "body": "import debugLog from 'common/src/helpers/debugLog.js';"},
+
+
+
+
+
 
 }
