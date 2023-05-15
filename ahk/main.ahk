@@ -231,36 +231,13 @@ explorer_create_new_file() {
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
-vol_show_shown := false
-vol_hide() {
-    global vol_show_shown
-    SetTimer, vol_hide, Off
-    Critical, On
-        RunWait, "C:\Program Files (x86)\HideVolumeOSD\HideVolumeOSD.exe" -hide
-        vol_show_shown := false
-    Critical, Off
-}
-
-vol_show() {
-    global vol_show_shown
-    SetTimer, vol_hide, Off
-    if (!vol_show_shown) {
-        Critical, On
-            vol_show_shown := true
-            RunWait, "C:\Program Files (x86)\HideVolumeOSD\HideVolumeOSD.exe" -show
-        Critical, Off
-    }
-    SetTimer, vol_hide, 300
-}
 
 vol_up(){
-    vol_show()
     Send, {Volume_Up}
     SetCapsLockState, AlwaysOff
 }
 
 vol_down() {
-    vol_show()
     Send, {Volume_Down}
     SetCapsLockState, AlwaysOff
 }
@@ -278,11 +255,7 @@ vol_down() {
 SetTimer, restart_programs, -1
 restart_programs() {
     Process, Close, AltDrag.exe
-    ; Process, Close, RBTray.exe
-    ; Process, Close, RetroBar.exe
     
-    Process, Close, HideVolumeOSD.exe
-    vol_hide()
 
     ; www.autohotkey.com/board/topic/33849-refreshtray/?p=410313
     DetectHiddenWindows, On
@@ -295,12 +268,8 @@ restart_programs() {
     }
     DetectHiddenWindows, Off
 
-    ; Run, explorer.exe C:\dev\rbtray\x64\RBTray.exe
-
     EnvGet, OutputVar, LOCALAPPDATA
     Run, % OutputVar . "\..\Roaming\AltDrag\AltDrag.exe -multi"
-
-    ; Run, explorer.exe C:\Program Files\RetroBar\RetroBar.exe
 }
 
 
@@ -314,7 +283,7 @@ restart_programs() {
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
 SetTimer, close_sublime_nag_windows, 250
-close_sublime_nag_windows() { 
+close_sublime_nag_windows() {
     ControlClick, Abbrechen, This is an unregistered copy
 }
 
@@ -367,135 +336,27 @@ class TurboPaste {
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 ; ;                                                               ; ;
-; ;                       Desktop Switching                       ; ;
-; ;                                                               ; ;
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
-
-desktop_get_current_desktop() {
-    RegRead, cur, HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\SessionInfo\1\VirtualDesktops, CurrentVirtualDesktop
-    RegRead, total, HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops, VirtualDesktopIDs
-    return floor(InStr(total,cur) / 32)
-}
-
-activate_foremost_window() {    
-    WinGet, WindowList, List 
-    to_activate = -1
-    Loop %WindowList% { 
-        WinUID := WindowList%A_Index% 
-        
-        WinGet, mini_maxi, MinMax, ahk_id %WinUID%
-        if (mini_maxi == -1) {
-            continue
-        }
-        WinGetTitle, WinTitle, ahk_id %WinUID%
-        if (WinTitle == "" or WinTitle == "remap_keys.ahk") {
-            continue
-        }
-        
-        to_activate := WinUID
-        break
-    }
-    if (to_activate == -1) {
-        return
-    }
-    WinActivate, ahk_id %to_activate%
-}
-
-
-desktop_set_icon() {
-    ico := desktop_get_current_desktop() +1
-    Menu, Tray, Icon, nums/%ico%.ico
-}
-
-SetTimer, desktop_refresh_number, 500
-desktop_refresh_number() { 
-    desktop_set_icon()
-}
-
-desktop_last := 0
-desktop_go_to(num) {
-    Critical, On
-    global desktop_names, show_desktop_name_num, desktop_last
-    current := desktop_get_current_desktop()
-    
-    if (num < 0) {
-        num := 11
-    }
-    if (num > 11) {
-        num := 0
-    }
-    
-    show_desktop_name_num := num
-    RunWait, DesktopSwitcher.exe %num%, , hide
-    
-    
-    SetTimer, desktop_set_icon, -1
-    SetTimer, activate_foremost_window, -1
-    
-    if (desktop_last != current) {
-        desktop_last := current
-    }
-    Critical, Off
-}
-
-desktop_go_to_prev() {
-    Critical, On
-    desktop_go_to(desktop_get_current_desktop() - 1)
-    Critical, Off
-}
-desktop_go_to_next() {
-    Critical, On
-    desktop_go_to(desktop_get_current_desktop() + 1)
-    Critical, Off
-}
-
-
-
-
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
-; ;                                                               ; ;
 ; ;                          Key Bindings                         ; ;
 ; ;                                                               ; ;
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 
 #^Tab::Send, {LWin down}{Tab}{LWin up}
-; #Tab::Return
 CapsLock::return
 
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
-    #^::desktop_go_to(desktop_last)
-    #1::desktop_go_to(0)
-    #2::desktop_go_to(1)
-    #3::desktop_go_to(2)
-    #4::desktop_go_to(3)
-    #5::desktop_go_to(4)
-    #6::desktop_go_to(5)
-    #7::desktop_go_to(6)
-    #8::desktop_go_to(7)
-    #9::desktop_go_to(8)
-    #0::desktop_go_to(9)
-    #ß::desktop_go_to(10)
-    #´::desktop_go_to(11)
-    
-    #^Left::desktop_go_to_prev()
-    #^Right::desktop_go_to_next()
 
-
-    #Numpad0::TurboPaste.paste(0)
-    #Numpad1::TurboPaste.paste(1)
-    #Numpad2::TurboPaste.paste(2)
-    #Numpad3::TurboPaste.paste(3)
-    #Numpad4::TurboPaste.paste(4)
-    #Numpad5::TurboPaste.paste(5)
-    #Numpad6::TurboPaste.paste(6)
-    #Numpad7::TurboPaste.paste(7)
-    #Numpad8::TurboPaste.paste(8)
-    #Numpad9::TurboPaste.paste(9)
+    #0::TurboPaste.paste(0)
+    #1::TurboPaste.paste(1)
+    #2::TurboPaste.paste(2)
+    #3::TurboPaste.paste(3)
+    #4::TurboPaste.paste(4)
+    #5::TurboPaste.paste(5)
+    #6::TurboPaste.paste(6)
+    #7::TurboPaste.paste(7)
+    #8::TurboPaste.paste(8)
+    #9::TurboPaste.paste(9)
 
     !^+a::Winset, Alwaysontop, , A
     
@@ -509,24 +370,16 @@ CapsLock::return
     !^+ä::explorer_restart()
     
     !^+.::window_toggle_app_mode()
-    
     ~!^+r::
-        ; screen_time_periodic(true)
         Reload
     Return
 
     !^+o::Run, explorer.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\AutoHotkey\Window Spy.lnk"
 
-    ; #t::Run, explorer.exe "C:\Program Files\WindowsApps\Microsoft.WindowsTerminal_1.15.2875.0_x64__8wekyb3d8bbwe\wt.exe"
-    #t::
-        path := "C:\Users\" . A_UserName
-        Run, PowerShell.exe -noexit -command Set-Location -literalPath '%path%'
-    Return
+    #t::Run, explorer.exe "C:\Users\rmn\AppData\Local\Microsoft\WindowsApps\wt.exe"
     
-    ; #q::window_to_bottom_and_activate_topmost()
     #q::minimize_current_window()
     #w::return
-    ; #^d::restore_all_windows()
     ~#d::
         Critical, On
         DetectHiddenWindows, On
@@ -539,23 +392,22 @@ CapsLock::return
     #.::return
     
     
-    
     !^+Up::vol_up()
     !^+Down::vol_down()
 
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
     
-    #Numpad0::TurboPaste.copy(0)
-    #Numpad1::TurboPaste.copy(1)
-    #Numpad2::TurboPaste.copy(2)
-    #Numpad3::TurboPaste.copy(3)
-    #Numpad4::TurboPaste.copy(4)
-    #Numpad5::TurboPaste.copy(5)
-    #Numpad6::TurboPaste.copy(6)
-    #Numpad7::TurboPaste.copy(7)
-    #Numpad8::TurboPaste.copy(8)
-    #Numpad9::TurboPaste.copy(9)
+    #0::TurboPaste.copy(0)
+    #1::TurboPaste.copy(1)
+    #2::TurboPaste.copy(2)
+    #3::TurboPaste.copy(3)
+    #4::TurboPaste.copy(4)
+    #5::TurboPaste.copy(5)
+    #6::TurboPaste.copy(6)
+    #7::TurboPaste.copy(7)
+    #8::TurboPaste.copy(8)
+    #9::TurboPaste.copy(9)
     
     q::Send, @
     7::Send, {{}
@@ -686,9 +538,6 @@ CapsLock::return
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class MSPaintApp ahk_exe mspaint.exe")
     ^W::Send !{f4}
-
-; #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe thunderbird.exe")
-;     ^W::window_to_bottom_and_activate_topmost()
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe powershell.exe")
     ^W::
