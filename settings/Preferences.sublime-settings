@@ -1,9 +1,9 @@
 {
-    "font_face": "Fira Code",
+    "font_face": "Fira Code Retina",
     "font_options": [],
-    "font_size": 21,
+    "font_size": 15,
     "tree_animation_enabled": false,
-    "scroll_speed": 0,
+    // "scroll_speed": 0,
     "spell_check": false,
     "auto_complete": false,
     "word_separators": "./\\()\"'-:,.;<>~!@#%^&*|+=[]{}`~?",
@@ -64,4 +64,5 @@
     "theme": "auto",
     // "color_scheme": "Monokai.sublime-color-scheme",
     /*"show_full_path": false,*/
+    "color_scheme": "Monokai.sublime-color-scheme",
 }
