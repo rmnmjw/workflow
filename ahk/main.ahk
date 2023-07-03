@@ -583,6 +583,132 @@ CapsLock::return
         Send, {Ctrl down}{Right}{Ctrl up}
     return
 
+#if !GetKeyState("CapsLock", "P") and WinActive("Edge") and WinActive(".pdf ahk_class Chrome_WidgetWin_1 ahk_exe msedge.exe")
+    
+    ; marker: red
+    F1::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+            MouseClick, L, wx+100, wy+90
+            Sleep, 100
+            MouseClick, L, wx+280, wy+162 ; color picking
+            MouseClick, L, wx+74, wy+90
+            MouseClick, L, wx+74, wy+90
+        MouseMove, x, y
+    Return
+    
+    ; marker: blue
+    F2::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+            MouseClick, L, wx+100, wy+90
+            Sleep, 100
+            MouseClick, L, wx+198, wy+162 ; color picking
+            MouseClick, L, wx+74, wy+90
+            MouseClick, L, wx+74, wy+90
+        MouseMove, x, y
+    Return
+
+    ; marker: green
+    F3::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+            MouseClick, L, wx+100, wy+90
+            Sleep, 100
+            MouseClick, L, wx+158, wy+162 ; color picking
+            MouseClick, L, wx+74, wy+90
+            MouseClick, L, wx+74, wy+90
+        MouseMove, x, y
+    Return
+
+    ; marker: yellow
+    F4::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+            MouseClick, L, wx+100, wy+90
+            Sleep, 100
+            MouseClick, L, wx+118, wy+162 ; color picking
+            MouseClick, L, wx+74, wy+90
+            MouseClick, L, wx+74, wy+90
+        MouseMove, x, y
+    Return
+    
+    ; pen: red
+    F5::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+            MouseClick, L, wx+249, wy+85
+            Sleep, 100
+            MouseClick, L, wx+304, wy+207
+            MouseClick, L, wx+193, wy+87
+            MouseClick, L, wx+193, wy+87
+        MouseMove, x, y
+    Return
+    
+    ; pen: blue
+    F6::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+            MouseClick, L, wx+249, wy+85
+            Sleep, 100
+            MouseClick, L, wx+426, wy+245
+            MouseClick, L, wx+193, wy+87
+            MouseClick, L, wx+193, wy+87
+        MouseMove, x, y
+    Return
+    
+    ; pen: green
+    F7::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+            MouseClick, L, wx+249, wy+85
+            Sleep, 100
+            MouseClick, L, wx+345, wy+245
+            MouseClick, L, wx+193, wy+87
+            MouseClick, L, wx+193, wy+87
+        MouseMove, x, y
+    Return
+    
+    ; pen: yellow
+    F8::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+            MouseClick, L, wx+249, wy+85
+            Sleep, 100
+            MouseClick, L, wx+465, wy+208
+            MouseClick, L, wx+193, wy+87
+            MouseClick, L, wx+193, wy+87
+        MouseMove, x, y
+    Return
+    
+    ; eraser
+    F9::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+        MouseClick, L, wx+74, wy+90
+        MouseClick, L, wx+281, wy+90
+        MouseMove, x, y
+    Return
+    
+    ; text
+    F10::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+        MouseClick, L, wx+74, wy+90
+        MouseClick, L, wx+326, wy+90
+        MouseMove, x, y
+    Return
+    
+    
+    Esc::
+        WinGetPos, wx, wy
+        MouseGetPos, x, y
+        MouseClick, L, wx+74, wy+90
+        MouseClick, L, wx+326, wy+90
+        MouseClick, L, wx+326, wy+90
+        MouseMove, x, y
+    Return
+
 #If !GetKeyState("CapsLock", "P")
 
     <^>!a::Send, α
