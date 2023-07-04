@@ -22,7 +22,7 @@ Menu, Tray, Default, Open Clockify
 
 class Clockify {
     
-    static TO_TRAY := true
+    static TO_TRAY := false
     
     static running := False
     static counter := 0
