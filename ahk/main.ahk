@@ -366,6 +366,7 @@ CapsLock::return
     !^+w::enter_random_string(10)
     !^+s::enter_random_number(1)
     
+    #c::Return
 
     !^+ä::explorer_restart()
     
@@ -392,7 +393,7 @@ CapsLock::return
         Critical, Off
     return
     
-    #c::Send, {LWin down}{LAlt down}d{LAlt up}{LWin up}
+    ; #c::Send, {LWin down}{LAlt down}d{LAlt up}{LWin up}
     #.::return
     
     
