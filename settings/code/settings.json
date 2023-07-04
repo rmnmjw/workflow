@@ -63,7 +63,10 @@
     "workbench.list.smoothScrolling": true,
     "editor.smoothScrolling": true,
     "terminal.integrated.smoothScrolling": true,
-    "window.zoomLevel": 1,
-    "editor.fontFamily": "Fira Code",
-    "editor.fontLigatures": false,
+    "editor.fontFamily": "Fira Code Retina",
+    "editor.fontLigatures": true,
+    "editor.mouseWheelScrollSensitivity": 1.5,
+    "volar.autoCompleteRefs": true,
+    "notebook.lineNumbers": "on",
+    "workbench.colorTheme": "Monokai",
 }
