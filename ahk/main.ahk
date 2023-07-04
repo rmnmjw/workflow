@@ -394,6 +394,7 @@ CapsLock::return
     return
     
     ; #c::Send, {LWin down}{LAlt down}d{LAlt up}{LWin up}
+    #s::Send, {LWin down}n{LWin up}
     #.::return
     
     
