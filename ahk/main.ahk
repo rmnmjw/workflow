@@ -376,7 +376,11 @@ CapsLock::return
 
     !^+o::Run, explorer.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\AutoHotkey\Window Spy.lnk"
 
-    #t::Run, explorer.exe "C:\Users\rmn\AppData\Local\Microsoft\WindowsApps\wt.exe"
+    #t::
+        Run, explorer.exe "C:\Users\rmn\AppData\Local\Microsoft\WindowsApps\wt.exe"
+        WinWait, Windows PowerShell
+        WinActivate, Windows PowerShell
+    return
     
     #q::minimize_current_window()
     #w::return
