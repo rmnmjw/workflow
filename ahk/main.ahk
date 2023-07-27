@@ -383,7 +383,8 @@ CapsLock::return
         WinActivate, Windows PowerShell
     return
     
-    #q::minimize_current_window()
+    ; #q::minimize_current_window()
+    #q::window_to_bottom_and_activate_topmost()
     #w::return
     ~#d::
         Critical, On
