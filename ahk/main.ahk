@@ -386,10 +386,23 @@ CapsLock::return
     ; #q::minimize_current_window()
     #q::window_to_bottom_and_activate_topmost()
     #w::return
-    ~#d::
+    #d::
         Critical, On
         DetectHiddenWindows, On
-        WinSet, Top,, ahk_exe RetroBar.exe
+        WinGet, whnd,, Desktop ahk_class CabinetWClass ahk_exe Explorer.EXE
+        if (whnd != "") {
+            WinGet, curr,, A
+            if (whnd == curr) {
+                DetectHiddenWindows, Off
+                Critical, Off
+                window_to_bottom_and_activate_topmost()
+                return
+            } else {
+                WinActivate, ahk_id %whnd%
+            }
+        } else {
+            RunWait, explorer.exe "C:\Users\rmn\Desktop"
+        }
         DetectHiddenWindows, Off
         Critical, Off
     return
