@@ -499,6 +499,8 @@ CapsLock::return
     Q::Send {LControl down}{LShift down}{-}{LShift up}{LControl up}
     E::Send {LControl down}{LShift down}{+}{LShift up}{LControl up}
     ^W::Send !{f4}
+    WheelLeft::Send {Left}
+    WheelRight::Send {Right}
     ; XButton1::Send {Left}
     ; XButton2::Send {Right}
 
