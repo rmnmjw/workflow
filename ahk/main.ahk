@@ -361,7 +361,7 @@ CapsLock::return
     #8::TurboPaste.paste(8)
     #9::TurboPaste.paste(9)
 
-    !^+a::Winset, Alwaysontop, , A
+    ; !^+a::Winset, Alwaysontop, , A
     
     !^+d::Send, %A_YYYY%-%A_MM%-%A_DD%
     !^+t::Send, %A_Hour%:%A_Min%
