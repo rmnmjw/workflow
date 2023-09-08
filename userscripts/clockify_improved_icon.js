@@ -20,6 +20,12 @@
         const icon_to_use = running ? ICON_RUNNING : ICON_DEFAULT;
 
         favicons.forEach((el) => el.href = icon_to_use)
+
+        if (running) {
+            navigator.setAppBadge();
+        } else {
+            navigator.setAppBadge(0);
+        }
     }).observe(
         document.querySelector('title'),
         { subtree: true, characterData: true, childList: true }
