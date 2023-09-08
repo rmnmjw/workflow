@@ -29,12 +29,7 @@
     "i18n-ally.displayLanguage": "de-DE",
     "editor.cursorBlinking": "smooth",
     "workbench.tree.indent": 18,
-    "editor.quickSuggestionsDelay": 0,
     "editor.showFoldingControls": "always",
-    "editor.tabCompletion": "onlySnippets",
-    "editor.quickSuggestions": {
-        "other": "off"
-    },
     "gitlens.telemetry.enabled": false,
     "eslint.format.enable": true,
     "javascript.updateImportsOnFileMove.enabled": "always",
@@ -43,8 +38,6 @@
     "editor.minimap.side": "right",
     "editor.autoClosingBrackets": "never",
     "editor.autoClosingQuotes": "never",
-    "editor.acceptSuggestionOnCommitCharacter": false,
-    "editor.suggestOnTriggerCharacters": false,
     "search.quickOpen.includeHistory": false,
     "window.autoDetectColorScheme": true,
     "sonarlint.disableTelemetry": true,
@@ -59,14 +52,39 @@
             "level": "off"
         }
     },
-    "workbench.sideBar.location": "right",
-    "workbench.list.smoothScrolling": true,
-    "editor.smoothScrolling": true,
-    "terminal.integrated.smoothScrolling": true,
     "editor.fontFamily": "Fira Code Retina",
     "editor.fontLigatures": true,
     "editor.mouseWheelScrollSensitivity": 1.5,
     "volar.autoCompleteRefs": true,
     "notebook.lineNumbers": "on",
-    "workbench.colorTheme": "Monokai",
+    "git.openRepositoryInParentFolders": "never",
+    "editor.fontSize": 15,
+    "workbench.editor.tabCloseButton": "right",
+    "editor.trimAutoWhitespace": false,
+    "editor.wordSeparators": "./\\()\"'-:,.;<>~!@#%^&*|+=[]{}`~?",
+    "editor.wordWrap": "off",
+    "editor.formatOnPaste": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.snippetSuggestions": "top",
+    "terminal.integrated.smoothScrolling": true,
+    "workbench.list.smoothScrolling": true,
+    "editor.smoothScrolling": true,
+    "workbench.colorTheme": "Sublime Monokai",
+    
+    
+    
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": false
+    },
+    "editor.acceptSuggestionOnCommitCharacter": true,
+    "editor.acceptSuggestionOnEnter": "on",
+    "editor.quickSuggestionsDelay": 10,
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.tabCompletion": "onlySnippets",
+    "editor.suggest.localityBonus": true,
+    "editor.suggestSelection": "first",
+    "editor.wordBasedSuggestions": false,
+    "editor.parameterHints.enabled": true,
 }

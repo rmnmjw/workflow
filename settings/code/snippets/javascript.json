@@ -12,11 +12,11 @@
 
 	"ed":  { "prefix": "ed",  "body": "export default "},
 
-	// "p":   { "prefix": "p",   "body": "console.log($1)" },
-	// "ü":   { "prefix": "ü",   "body": "console.log(`$1`, $1)" },
+	"p":   { "prefix": "p",   "body": "console.log($1)" },
+	"ü":   { "prefix": "ü",   "body": "console.log(`$1`, $1)" },
 
-	"p":   { "prefix": "p",   "body": "(async () => {\n\tconst log = (await import('common/src/helpers/debugLog.js')).default;\n\tlog($1);\n})();" },
-	"ü":   { "prefix": "ü",   "body": "(async () => {\n\tconst log = (await import('common/src/helpers/debugLog.js')).default;\n\tlog(`$1`, $1);\n})();" },
+	// "p":   { "prefix": "p",   "body": "(async () => {\n\tconst log = (await import('common/src/helpers/debugLog.js')).default;\n\tlog($1);\n})();" },
+	// "ü":   { "prefix": "ü",   "body": "(async () => {\n\tconst log = (await import('common/src/helpers/debugLog.js')).default;\n\tlog(`$1`, $1);\n})();" },
 
 
 	// "dl":   { "prefix": "dl",   "body": "import debugLog from 'common/src/helpers/debugLog.js';" },
