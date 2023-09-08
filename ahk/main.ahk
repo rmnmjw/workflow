@@ -23,8 +23,21 @@ SetScrollLockState, AlwaysOff
 TEMP_FILE := A_Temp . "\autohotkey.ini"
 
 
-
-
+; SysGet, MonitorCount, MonitorCount
+; SysGet, MonitorPrimary, MonitorPrimary
+; SysGet, Monitor, Monitor, 1
+; m_xmin := MonitorLeft
+; m_ymin := MonitorTop
+; m_xmax := MonitorRight
+; m_ymax := MonitorBottom
+; SetTimer, check_monitor, 1000
+; check_monitor() {
+;     global m_xmin, m_ymin, m_xmax, m_ymax
+;     SysGet, Monitor, Monitor, 1
+;     if (m_xmin != MonitorLeft || m_ymin != MonitorTop || m_xmax != MonitorRight || m_ymax != MonitorBottom) {
+;         Reload
+;     }
+; }
 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 ;                                                               ; 
