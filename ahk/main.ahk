@@ -429,10 +429,6 @@ CapsLock::return
     #s::Send, {LWin down}n{LWin up}
     #.::return
     
-    F14::
-    !^+Up::vol_up()
-    F15::
-    !^+Down::vol_down()
 
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
@@ -463,9 +459,19 @@ CapsLock::return
     WheelUp::vol_up()
     WheelDown::vol_down()
 
-#If GetKeyState("ScrollLock", "P")
+    !^+Up::vol_up()
+    !^+Down::vol_down()
+
+#If GetKeyState("F14", "P")
     WheelUp::Send, {WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}
     WheelDown::Send, {WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}
+    
+#If GetKeyState("F15", "P")
+    WheelUp::vol_up()
+    WheelDown::vol_down()
+    
+#If GetKeyState("F16", "P")
+    ; nothing yet
     
 #IfWinActive, ahk_class CabinetWClass
     ^+m::explorer_create_new_file()
