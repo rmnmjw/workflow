@@ -360,8 +360,10 @@ class TurboPaste {
 #^Tab::Send, {LWin down}{Tab}{LWin up}
 CapsLock::return
 
+
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
+    F13::Send ^w
 
     #0::TurboPaste.paste(0)
     #1::TurboPaste.paste(1)
@@ -427,8 +429,9 @@ CapsLock::return
     #s::Send, {LWin down}n{LWin up}
     #.::return
     
-    
+    F14::
     !^+Up::vol_up()
+    F15::
     !^+Down::vol_down()
 
 ; CapsLock is DOWN
@@ -495,7 +498,8 @@ CapsLock::return
     :*:elt::let
     :*:wheil::while
     :*:whiel::while
-    
+
+
 #IfWinActive, ahk_class SWT_Window0 ahk_exe eclipse.exe
     NumPadDot::Send, .
 #IfWinActive, ahk_class SunAwtFrame
@@ -504,7 +508,11 @@ CapsLock::return
     NumPadDot::Send, .
 
 #IfWinActive, ahk_exe vlc.exe
-    ^W::WinClose, A
+    F13::WinClose, A
+    
+
+#If !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe firefox.exe")
+    F13::Send ^w
     
 #If !GetKeyState("CapsLock", "P") and WinActive("ahk_class SUMATRA_PDF_FRAME") and get_focus_name() == ""
     A::Send {Left}
@@ -514,7 +522,7 @@ CapsLock::return
     F::Send {F5}
     Q::Send {LControl down}{LShift down}{-}{LShift up}{LControl up}
     E::Send {LControl down}{LShift down}{+}{LShift up}{LControl up}
-    ^W::Send !{f4}
+    F13::Send !{f4}
     WheelLeft::Send {Left}
     WheelRight::Send {Right}
     ; XButton1::Send {Left}
@@ -533,52 +541,65 @@ CapsLock::return
  or WinActive("ahk_exe Taskmgr.exe")
  or WinActive("ahk_class Photo_Lightweight_Viewer"))
     Esc::Send !{f4}
-    ^W::Send !{f4}
+    F13::Send !{f4}
+
+
+
+
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class TaskManagerWindow ahk_exe Taskmgr.exe")
+    ^W::
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe cmd.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class WorkerW ahk_exe explorer.exe")
     F1::Return
 
 #if !GetKeyState("CapsLock", "P") and WinActive("Uhr ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("Rechner ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("Einstellungen ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("Microsoft Store ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
     
 #if !GetKeyState("CapsLock", "P") and WinActive("Windows-Sicherheit ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS ahk_exe WindowsTerminal.exe")
-    ^W::Send ^+W
+    F13::Send ^+W
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class PX_WINDOW_CLASS ahk_exe sublime_merge.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
     
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class Chrome_WidgetWin_1 ahk_exe Qobuz.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
     
 #if !GetKeyState("CapsLock", "P") and WinActive("Window Spy ahk_exe AutoHotkey.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class Chrome_WidgetWin_0 ahk_exe Spotify.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class {97E27FAA-C0B3-4b8e-A693-ED7881E99FC1} ahk_exe foobar2000.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class MSPaintApp ahk_exe mspaint.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
+
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class HwndWrapper[DeepL;;dbb0e6c7-c7f0-4c9a-86ab-8ead43f74392] ahk_exe DeepL.exe")
+    F13::Send !{f4}
+
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe powershell.exe")
-    ^W::
+    F13::
         Send, {Alt down}
         Sleep, 10
         Send, {Space}
@@ -589,10 +610,10 @@ CapsLock::return
     Return
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe ubuntu.exe")
-    ^W::WinClose
+    F13::WinClose
     
 #if !GetKeyState("CapsLock", "P") and WinActive("Medienwiedergabe ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
-    ^W::Send !{f4}
+    F13::Send !{f4}
     
     j::
         Send, {Ctrl down}{Shift down}j{Shift up}{Ctrl up}
