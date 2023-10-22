@@ -270,7 +270,7 @@ vol_down() {
 
 SetTimer, restart_programs, -1
 restart_programs() {
-    Process, Close, AltDrag.exe
+    Process, Close, AltSnap.exe
     
 
     ; www.autohotkey.com/board/topic/33849-refreshtray/?p=410313
@@ -285,7 +285,7 @@ restart_programs() {
     DetectHiddenWindows, Off
 
     EnvGet, OutputVar, LOCALAPPDATA
-    Run, % OutputVar . "\..\Roaming\AltDrag\AltDrag.exe -multi"
+    Run, % OutputVar . "\..\Roaming\AltSnap\AltSnap.exe"
 }
 
 
