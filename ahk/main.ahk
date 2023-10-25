@@ -461,6 +461,8 @@ CapsLock::return
 
     !^+Up::vol_up()
     !^+Down::vol_down()
+    
+    !^End::Run %a_scriptdir%\_hibernate.ahk
 
 #If GetKeyState("F14", "P")
     WheelUp::Send, {WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}
