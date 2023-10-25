@@ -326,7 +326,6 @@ class TurboPaste {
         Critical, Off
         
         copied := TurboPaste.buffer[key]
-        ; TrayTip , TurboPaste: Copy into Buffer [ %key% ], %copied%, 1, 17
         TrayTip , TurboPaste: Copy into Buffer, %key%, 1, 17
     }
     
@@ -340,7 +339,6 @@ class TurboPaste {
         Critical, Off
         
         pasted := TurboPaste.buffer[key]
-        ; TrayTip , TurboPaste: Paste from Buffer [ %key% ], %pasted%, 1, 17
         TrayTip , TurboPaste: Paste from Buffer, %key%, 1, 17
     }
 }
