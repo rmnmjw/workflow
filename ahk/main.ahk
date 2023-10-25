@@ -431,6 +431,11 @@ CapsLock::return
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
     
+    j::Left
+    k::Up
+    l::Down
+    ö::Right
+    
     #0::TurboPaste.copy(0)
     #1::TurboPaste.copy(1)
     #2::TurboPaste.copy(2)
