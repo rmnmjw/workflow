@@ -604,6 +604,9 @@ CapsLock::return
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
     F13::Send !{f4}
 
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_exe Everything64.exe")
+    Esc::Send !{f4}
+
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe powershell.exe")
     F13::
         Send, {Alt down}
