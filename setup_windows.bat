@@ -50,6 +50,7 @@ winget install -e --id AltSnap.AltSnap
 winget install -e --id Brave.Brave
 winget install -e --id Docker.DockerDesktop
 winget install -e --id dotPDNLLC.paintdotnet
+winget install -e --id FontForge.FontForge
 winget install -e --id Git.Git
 winget install -e --id Gyan.FFmpeg
 winget install -e --id Lexikos.AutoHotkey
