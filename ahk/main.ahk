@@ -370,7 +370,6 @@ CapsLock::return
 
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
-    F13::Send ^w
 
     #0::TurboPaste.paste(0)
     #1::TurboPaste.paste(1)
@@ -851,5 +850,8 @@ CapsLock::return
     <^>!Numpad8::Send, ┬
     <^>!Numpad9::Send, ┐
     <^>!NumpadSub::Send, ─
-    
+
+#If !GetKeyState("CapsLock", "P")
+    F13::Send ^w
+
 #IfWinActive
