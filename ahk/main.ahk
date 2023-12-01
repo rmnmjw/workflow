@@ -286,6 +286,7 @@ restart_programs() {
 
     EnvGet, OutputVar, LOCALAPPDATA
     Run, % OutputVar . "\..\Roaming\AltSnap\AltSnap.exe"
+    RunWait .\HideVolumeOSD.exe
     Critical, Off
 }
 
