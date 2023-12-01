@@ -489,6 +489,7 @@ CapsLock::return
     
 #IfWinActive, ahk_class CabinetWClass
     ^+m::explorer_create_new_file()
+    F1::Return
 
 #IfWinActive, ahk_class SunAwtFrame ahk_exe idea64.exe
     :*:val ::var 
