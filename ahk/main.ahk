@@ -207,8 +207,7 @@ enter_random_number(len) {
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
 explorer_restart() {
-    RunWait taskkill /F /IM explorer.exe
-    RunWait explorer.exe
+    RunWait restart_explorer.bat
 }
 
 
