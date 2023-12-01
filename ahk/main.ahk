@@ -270,6 +270,7 @@ vol_down() {
 
 SetTimer, restart_programs, -1
 restart_programs() {
+    Critical, On
     Process, Close, AltSnap.exe
     
 
@@ -286,6 +287,7 @@ restart_programs() {
 
     EnvGet, OutputVar, LOCALAPPDATA
     Run, % OutputVar . "\..\Roaming\AltSnap\AltSnap.exe"
+    Critical, Off
 }
 
 
