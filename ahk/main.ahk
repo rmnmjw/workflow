@@ -496,29 +496,8 @@ CapsLock::return
 #IfWinActive, ahk_class PX_WINDOW_CLASS ahk_exe sublime_text.exe
     NumPadDot::Send, .
 
-    :*:cosnt::const
-    :*:costn::const
-    :*:cosnst::const 
-    :*:cosn t::const 
-    :*:cson t::const 
-
-    :*:elt::let
-    :*:wheil::while
-    :*:whiel::while
-
 #IfWinActive, ahk_class Chrome_WidgetWin_1 ahk_exe Code.exe
     NumPadDot::Send, .
-    
-    :*:cosnt::const
-    :*:costn::const
-    :*:cosnst::const 
-    :*:cosn t::const 
-    :*:cson t::const 
-    
-    :*:elt::let
-    :*:wheil::while
-    :*:whiel::while
-
 
 #IfWinActive, ahk_class SWT_Window0 ahk_exe eclipse.exe
     NumPadDot::Send, .
