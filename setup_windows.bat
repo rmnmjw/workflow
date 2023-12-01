@@ -47,6 +47,7 @@ winget uninstall "WhatsApp"
 winget install --source winget --scope machine python3
 
 winget install -e --id AltSnap.AltSnap
+winget install -e --id Anki.Anki
 winget install -e --id Brave.Brave
 winget install -e --id Docker.DockerDesktop
 winget install -e --id dotPDNLLC.paintdotnet
@@ -69,6 +70,7 @@ winget install -e --id SublimeHQ.SublimeMerge
 winget install -e --id SublimeHQ.SublimeText.4
 winget install -e --id TeamSpeakSystems.TeamSpeakClient
 winget install -e --id Valve.Steam
+winget install -e --id VideoLAN.VLC
 winget install -e --id voidtools.Everything.Alpha
 winget install -e --id Winamp.Winamp
 winget install -e --id yt-dlp.yt-dlp
