@@ -315,6 +315,11 @@ close_sublime_nag_windows() {
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
+tooltip_clear() {
+    SetTimer, tooltip_clear, off
+    ToolTip
+}
+
 class TurboPaste {
     static buffer := {}
     
@@ -328,7 +333,8 @@ class TurboPaste {
         Critical, Off
         
         copied := TurboPaste.buffer[key]
-        TrayTip , TurboPaste: Copy into Buffer, %key%, 1, 17
+        ToolTip, Copy into Buffer %key%
+        SetTimer, tooltip_clear, 700
     }
     
     paste(key) {
@@ -341,7 +347,8 @@ class TurboPaste {
         Critical, Off
         
         pasted := TurboPaste.buffer[key]
-        TrayTip , TurboPaste: Paste from Buffer, %key%, 1, 17
+        ToolTip, Paste from Buffer %key%
+        SetTimer, tooltip_clear, 700
     }
 }
 
