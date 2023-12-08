@@ -246,18 +246,24 @@ explorer_create_new_file() {
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
-
-vol_up(){
-    Send, {Volume_Up}
-    SetCapsLockState, AlwaysOff
+hide_volume_osd_move_up() {
+    ; WinGetPos, x, y, width, height, ahk_class WindowsForms10.Window.8.app.0.141b42a_r8_ad1 ahk_exe HideVolumeOSD.exe
+    WinMove, ahk_exe HideVolumeOSD.exe, , A_ScreenWidth-240, 5, 118, 66
 }
 
-vol_down() {
-    Send, {Volume_Down}
+vol_up_down(up) {
+    ; hide_volume_osd_move_up()
+    if (up) {
+        Send, {Volume_Up}
+    } else {
+        Send, {Volume_Down}
+    }
+    SoundGet, m
+    m := m + 0.1
+    SoundSet, m
     SetCapsLockState, AlwaysOff
+    ; hide_volume_osd_move_up()
 }
-
-
 
 
 
@@ -370,7 +376,10 @@ CapsLock::return
 
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
-
+    
+    Volume_Up::vol_up_down(true)
+    Volume_Down::vol_up_down(false)
+    
     #0::TurboPaste.paste(0)
     #1::TurboPaste.paste(1)
     #2::TurboPaste.paste(2)
@@ -467,11 +476,11 @@ CapsLock::return
     PrintScreen::Send, {PrintScreen}
     NumPadDot::Send, .
 
-    WheelUp::vol_up()
-    WheelDown::vol_down()
+    WheelUp::vol_up_down(true)
+    WheelDown::vol_up_down(false)
 
-    !^+Up::vol_up()
-    !^+Down::vol_down()
+    !^+Up::vol_up_down(true)
+    !^+Down::vol_up_down(false)
     
     !^End::Run %a_scriptdir%\_hibernate.ahk
 
@@ -480,8 +489,8 @@ CapsLock::return
     WheelDown::Send, {WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}
     
 #If GetKeyState("F15", "P")
-    WheelUp::vol_up()
-    WheelDown::vol_down()
+    WheelUp::vol_up_down(true)
+    WheelDown::vol_up_down(false)
     
 #If GetKeyState("F16", "P")
     ; nothing yet
