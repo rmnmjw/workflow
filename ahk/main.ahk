@@ -252,7 +252,7 @@ hide_volume_osd_move_up() {
 }
 
 vol_up_down(up) {
-    ; hide_volume_osd_move_up()
+    hide_volume_osd_move_up()
     if (up) {
         Send, {Volume_Up}
     } else {
@@ -262,7 +262,7 @@ vol_up_down(up) {
     m := m + 0.1
     SoundSet, m
     SetCapsLockState, AlwaysOff
-    ; hide_volume_osd_move_up()
+    hide_volume_osd_move_up()
 }
 
 
