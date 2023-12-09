@@ -653,6 +653,12 @@ CapsLock::return
         Send, {Ctrl down}{Right}{Ctrl up}
     return
 
+#if !GetKeyState("CapsLock", "P") and WinActive("Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+    F1::
+        WinMinimize, A
+        Run, C:\ProgramData\Microsoft\Windows\Start Menu\clockify both.lnk
+    return
+    
 #if !GetKeyState("CapsLock", "P") and WinActive("Edge") and WinActive(".pdf ahk_class Chrome_WidgetWin_1 ahk_exe msedge.exe")
     
     ; marker: red
