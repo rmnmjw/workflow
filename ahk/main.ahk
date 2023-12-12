@@ -360,6 +360,39 @@ class TurboPaste {
 
 
 
+zoomit_zoom := 0
+zoomit_zoom_in() {
+    global zoomit_zoom
+    Critical, On
+    if (zoomit_zoom < 0) {
+        zoomit_zoom := 0
+        ToolTip,
+    }
+    if (WinActive("Zoomit Zoom Window ahk_class ZoomitClass ahk_exe ZoomIt64.exe")) {
+        Send, {WheelUp}
+        zoomit_zoom := zoomit_zoom + 1
+    } else {
+        Send, {Ctrl down}{Shift down}{Alt down}z{Alt up}{Shift up}{Ctrl up}
+        Sleep, 100
+    }
+    Critical, Off
+}
+zoomit_zoom_out() {
+    global zoomit_zoom
+    Critical, On
+    if (WinActive("Zoomit Zoom Window ahk_class ZoomitClass ahk_exe ZoomIt64.exe")) {
+        Send, {WheelDown}
+        zoomit_zoom := zoomit_zoom - 1
+        if (zoomit_zoom <= 0) {
+            ToolTip, z: %zoomit_zoom%
+        }
+        if (zoomit_zoom <= -10) {
+            ToolTip,
+            Send, {Ctrl down}{Shift down}{Alt down}z{Alt up}{Shift up}{Ctrl up}
+        }
+    }
+    Critical, Off
+}
 
 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
@@ -475,9 +508,9 @@ CapsLock::return
     +::Send, ~
     PrintScreen::Send, {PrintScreen}
     NumPadDot::Send, .
-
-    WheelUp::vol_up_down(true)
-    WheelDown::vol_up_down(false)
+        
+    WheelUp::zoomit_zoom_in()
+    WheelDown::zoomit_zoom_out()
 
     !^+Up::vol_up_down(true)
     !^+Down::vol_up_down(false)
@@ -494,7 +527,11 @@ CapsLock::return
     
 #If GetKeyState("F16", "P")
     ; nothing yet
-    
+
+#IfWinActive, ahk_class ZoomitClass ahk_exe ZoomIt64.exe
+    WheelUp::zoomit_zoom_in()
+    WheelDown::zoomit_zoom_out()
+
 #IfWinActive, ahk_class CabinetWClass
     ^+m::explorer_create_new_file()
     F1::Return
