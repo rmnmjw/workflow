@@ -24,6 +24,21 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 
 #include lib/run_as_user.ahk
 
+
+; https://www.autohotkey.com/board/topic/8432-script-for-changing-mouse-pointer-speed/
+cursor_speed_get() {
+    DllCall("SystemParametersInfo", UInt, 0x70, UInt, 0, UIntP, result, UInt, 0) 
+    return result
+}
+cursor_speed_set(speed=6) {
+    speed := Floor(speed)
+    DllCall("SystemParametersInfo", UInt, 0x71, UInt, 0, UInt, speed, UInt, 0) 
+}
+cursor_speed_set()
+
+
+
+
 ; SysGet, MonitorCount, MonitorCount
 ; SysGet, MonitorPrimary, MonitorPrimary
 ; SysGet, Monitor, Monitor, 1
@@ -383,6 +398,7 @@ zoomit_zoom_in() {
     Critical, On
     if (zoomit_zoom < 0) {
         zoomit_zoom := 0
+        cursor_speed_set()
         ToolTip,
     }
     if (WinActive("Zoomit Zoom Window ahk_class ZoomitClass ahk_exe ZoomIt64.exe")) {
@@ -392,18 +408,24 @@ zoomit_zoom_in() {
         Send, {Ctrl down}{Shift down}{Alt down}z{Alt up}{Shift up}{Ctrl up}
         Sleep, 100
     }
+    z := Min(6, Max(1, 6-Ceil(Abs(zoomit_zoom+1))))
+    cursor_speed_set(z)
     Critical, Off
 }
 zoomit_zoom_out() {
     global zoomit_zoom
     Critical, On
+    
     if (WinActive("Zoomit Zoom Window ahk_class ZoomitClass ahk_exe ZoomIt64.exe")) {
         Send, {WheelDown}
         zoomit_zoom := zoomit_zoom - 1
         if (zoomit_zoom <= 0) {
             ToolTip, z: %zoomit_zoom%
         }
-        if (zoomit_zoom <= -10) {
+        z := Min(6, Max(1, 6-Ceil(Abs(zoomit_zoom+1))))
+        cursor_speed_set(z)
+        if (zoomit_zoom <= -5) {
+            cursor_speed_set()
             ToolTip,
             Send, {Ctrl down}{Shift down}{Alt down}z{Alt up}{Shift up}{Ctrl up}
         }
@@ -546,6 +568,10 @@ CapsLock::return
     ; nothing yet
 
 #IfWinActive, ahk_class ZoomitClass ahk_exe ZoomIt64.exe
+    ~Esc::
+        cursor_speed_set()
+        ToolTip,
+    return
     WheelUp::zoomit_zoom_in()
     WheelDown::zoomit_zoom_out()
 
