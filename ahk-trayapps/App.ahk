@@ -145,3 +145,41 @@ ExitFunc(ExitReason, ExitCode) {
     }
     Sleep, 100
 }
+
+#if !GetKeyState("CapsLock", "P") and WinActive(APP_SELECTOR)
+    #Q::App.close()
+    
+    LButton::
+        CoordMode, Mouse, Screen
+        MouseGetPos, vPosX, vPosY, hWnd
+
+        WinGetClass, vWinClass, ahk_id %hWnd%
+        
+        ; https://stackoverflow.com/questions/39882844/is-it-possible-to-catch-the-close-button-and-minimize-the-window-instead-autoho
+        if vWinClass not in BaseBar,#32768,Shell_TrayWnd,WorkerW,Progman,DV2ControlHost
+        {
+            SendMessage, 0x84, 0, vPosX|(vPosY<<16), , ahk_id %hWnd% ;WM_NCHITTEST
+            vNCHITTEST := ErrorLevel ;(8 min, 9 max, 20 close)
+            
+            if (APP_NAME == "Threema") {
+                MouseGetPos, x, y
+                WinGetPos, wx, wy, ww, wh
+                q := (wx + ww - x) <= 220 && (wx + ww - x) >= 152
+                if (q && (vNCHITTEST == 2 || vNCHITTEST == 8)) {
+                    App.close()
+                    Return
+                }
+            } else {
+                if (vNCHITTEST == 8) {
+                    App.close()
+                    Return
+                }
+            }
+            
+        }
+        SendInput {LButton Down}
+        KeyWait, LButton
+        SendInput {LButton Up}
+    Return
+    
+#IfWinActive
