@@ -253,7 +253,6 @@ hide_volume_osd_move_up() {
 }
 
 vol_up_down(up) {
-    hide_volume_osd_move_up()
     if (up) {
         Send, {Volume_Up}
     } else {
