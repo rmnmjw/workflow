@@ -3,14 +3,16 @@
 #UseHook
 #NoEnv
 ListLines Off ; Displays the script lines most recently executed.
-SetBatchLines -1 ; Determines how fast a script will run (affects CPU utilization).
-#MaxHotkeysPerInterval 100
 DetectHiddenWindows, On
 CoordMode, Mouse, Screen
 SendMode Input
 SetTitleMatchMode, 2
 SetWorkingDir %A_ScriptDir%
+
+SetBatchLines -1 ; Determines how fast a script will run (affects CPU utilization).
+#MaxHotkeysPerInterval 800
 SetWinDelay, 0
+
 
 global APP_NAME, global APP_SELECTOR, global APP_RUN
 
@@ -78,15 +80,20 @@ class App {
         }
     }
     
-    update() {
+    launch_if_needed() {
         WinGet, hwnd, ID, %APP_SELECTOR%
         if (hwnd == "") {
             return App.launch()
         }
-        
+    }
+    
+    update() {
         WinGetTitle, t, %APP_SELECTOR%
-        
-        active := RegExMatch(t, ".*[0-9].*") != 0
+        if (APP_NAME == "Spotify") {
+            active := RegExMatch(t, ".*Webplayer.*") == 0 && RegExMatch(t, ".* playlist by .*") == 0
+        } else {
+            active := RegExMatch(t, ".*[0-9].*") != 0
+        }
         
         if (active) {
             if (!App.running) {
@@ -104,7 +111,10 @@ class App {
             Menu, Tray, Tip , %t%
             App.last_title := t
         }
-        
+        App.to_tray_if_needed()
+    }
+    
+    to_tray_if_needed() {
         if (App.TO_TRAY) {
             WinGet WinState, MinMax, %APP_SELECTOR%
             if (WinState == -1) {
@@ -116,12 +126,19 @@ class App {
 }
 
 App.update()
+App.to_tray_if_needed()
 
+SetTimer, timer2, 5000
+timer2() {
+    Global App
+    App.launch_if_needed()
+}
 SetTimer, timer, 1000
 timer() {
     global App
     App.update()
 }
+
 
 ~!^+r::
     SetTimer, timer, 99999999
