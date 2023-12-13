@@ -554,7 +554,24 @@ CapsLock::return
     !^+Up::vol_up_down(true)
     !^+Down::vol_up_down(false)
     
-    !^End::Run %a_scriptdir%\_hibernate.ahk
+    !^End::
+        i := 0
+        Loop {
+            if (i >= 300) {
+                return
+            }
+            d_CapsLock := GetKeyState("CapsLock", "P")
+            d_Control := GetKeyState("Ctrl")
+            d_Alt := GetKeyState("Alt")
+            if (d_CapsLock || d_Control || d_Alt) {
+                Sleep, 10
+                i += 1
+                Continue
+            }
+            break
+        }
+        Run %a_scriptdir%\_hibernate.ahk
+    return
 
 #If GetKeyState("F14", "P")
     WheelUp::Send, {WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}
