@@ -22,6 +22,7 @@ SetScrollLockState, AlwaysOff
 
 TEMP_FILE := A_Temp . "\autohotkey.ini"
 
+#include lib/run_as_user.ahk
 
 ; SysGet, MonitorCount, MonitorCount
 ; SysGet, MonitorPrimary, MonitorPrimary
@@ -267,33 +268,50 @@ vol_up_down(up) {
 
 
 
+
+
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 ;                                                               ; 
-;                            Startup                            ;
+;                    Close and Start Programs                   ;
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+
+SetTimer, restart_program_alt_snap, -1
+restart_program_alt_snap() {
+    Process, WaitClose, AltSnap.exe, 1
+    Process, Close, AltSnap.exe
+    EnvGet, OutputVar, LOCALAPPDATA
+    Run, % OutputVar . "\..\Roaming\AltSnap\AltSnap.exe"
+}
+
+SetTimer, restart_program_hide_volume_osd, -1
+restart_program_hide_volume_osd() {
+    Process, WaitClose, HideVolumeOSD.exe, 1
+    Process, Close, HideVolumeOSD.exe
+    run_as_user("HideVolumeOSD.exe", "", 0)
+    task_bar_reset()
+}
 
 SetTimer, restart_programs, -1
 restart_programs() {
-    Critical, On
-    Process, Close, AltSnap.exe
+    Process, WaitClose, ZoomIt64.exe, 1
+    Process, Close, ZoomIt64.exe
+    run_as_user("ZoomIt64.exe", "", 0)
+}
+
+task_bar_reset() {
+    WinExist("ahk_class Shell_TrayWnd")
+    SysGet, s, Monitor
     
-
-    ; www.autohotkey.com/board/topic/33849-refreshtray/?p=410313
-    DetectHiddenWindows, On
-    ControlGetPos,,,w,h,ToolbarWindow321, AHK_class NotifyIconOverflowWindow
-    width:=w, hight:=h
-    While % ((h:=h-5)>0 and w:=width){
-        While % ((w:=w-5)>0){
-            PostMessage, 0x200,0,% ((hight-h) >> 16)+width-w,ToolbarWindow321, AHK_class NotifyIconOverflowWindow
-        }
-    }
-    DetectHiddenWindows, Off
-
-    EnvGet, OutputVar, LOCALAPPDATA
-    Run, % OutputVar . "\..\Roaming\AltSnap\AltSnap.exe"
-    RunWait .\HideVolumeOSD.exe
-    Critical, Off
+    WM_ENTERSIZEMOVE := 0x0231
+    WM_EXITSIZEMOVE  := 0x0232
+    
+    SendMessage, WM_ENTERSIZEMOVE
+        WinMove, , , sLeft, sBottom, sRight, 0
+    SendMessage, WM_EXITSIZEMOVE
+    SendMessage, WM_ENTERSIZEMOVE
+        WinMove, , , sLeft, sTop, sRight, 0
+    SendMessage, WM_EXITSIZEMOVE
 }
 
 
