@@ -87,6 +87,30 @@ cursor_speed_set()
 
 
 
+web_app_refresh(selector) {
+    WinGet WinState, MinMax, %selector%
+    
+    WinActivate, %selector%
+    WinWait, %selector%
+    Send, {F5}
+    
+    if (WinState == -1) {
+        WinMinimize, %selector%
+    }
+    Sleep, 100
+}
+
+web_app_refresh("WhatsApp ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+web_app_refresh("Telegram ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+web_app_refresh("Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+web_app_refresh("MailHog ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+; web_app_refresh("Discord ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+; web_app_refresh("Spotify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+; web_app_refresh("Microsoft Teams ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+
+
+
+
 ; SysGet, MonitorCount, MonitorCount
 ; SysGet, MonitorPrimary, MonitorPrimary
 ; SysGet, Monitor, Monitor, 1
