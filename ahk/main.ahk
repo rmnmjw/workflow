@@ -481,7 +481,7 @@ CapsLock::return
         Reload
     Return
 
-    !^+o::Run, explorer.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\AutoHotkey\Window Spy.lnk"
+    !^+o::Run, explorer.exe "C:\Program Files\AutoHotkey\WindowSpy.ahk"
 
     #t::
         Run, explorer.exe "C:\Users\rmn\AppData\Local\Microsoft\WindowsApps\wt.exe"
