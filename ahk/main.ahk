@@ -25,6 +25,54 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 #include lib/run_as_user.ahk
 
 
+; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+;                                                               ; 
+;                    Close and Start Programs                   ;
+;                                                               ; 
+; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+
+SetTimer, restart_program_alt_snap, -1
+restart_program_alt_snap() {
+    Process, WaitClose, AltSnap.exe, 1
+    Process, Close, AltSnap.exe
+    EnvGet, OutputVar, LOCALAPPDATA
+    Run, % OutputVar . "\..\Roaming\AltSnap\AltSnap.exe"
+}
+
+SetTimer, restart_program_hide_volume_osd, -1
+restart_program_hide_volume_osd() {
+    Process, WaitClose, HideVolumeOSD.exe, 1
+    Process, Close, HideVolumeOSD.exe
+    run_as_user("HideVolumeOSD.exe", "", 0)
+    task_bar_reset()
+}
+
+SetTimer, restart_programs, -1
+restart_programs() {
+    Process, WaitClose, ZoomIt64.exe, 1
+    Process, Close, ZoomIt64.exe
+    run_as_user("ZoomIt64.exe", "", 0)
+}
+
+task_bar_reset() {
+    WinExist("ahk_class Shell_TrayWnd")
+    SysGet, s, Monitor
+    
+    WM_ENTERSIZEMOVE := 0x0231
+    WM_EXITSIZEMOVE  := 0x0232
+    
+    SendMessage, WM_ENTERSIZEMOVE
+        WinMove, , , sLeft, sBottom, sRight, 0
+    SendMessage, WM_EXITSIZEMOVE
+    SendMessage, WM_ENTERSIZEMOVE
+        WinMove, , , sLeft, sTop, sRight, 0
+    SendMessage, WM_EXITSIZEMOVE
+}
+
+
+
+
+
 ; https://www.autohotkey.com/board/topic/8432-script-for-changing-mouse-pointer-speed/
 cursor_speed_get() {
     DllCall("SystemParametersInfo", UInt, 0x70, UInt, 0, UIntP, result, UInt, 0) 
@@ -278,54 +326,6 @@ vol_up_down(up) {
     SoundSet, m
     SetCapsLockState, AlwaysOff
     hide_volume_osd_move_up()
-}
-
-
-
-
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                    Close and Start Programs                   ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-
-SetTimer, restart_program_alt_snap, -1
-restart_program_alt_snap() {
-    Process, WaitClose, AltSnap.exe, 1
-    Process, Close, AltSnap.exe
-    EnvGet, OutputVar, LOCALAPPDATA
-    Run, % OutputVar . "\..\Roaming\AltSnap\AltSnap.exe"
-}
-
-SetTimer, restart_program_hide_volume_osd, -1
-restart_program_hide_volume_osd() {
-    Process, WaitClose, HideVolumeOSD.exe, 1
-    Process, Close, HideVolumeOSD.exe
-    run_as_user("HideVolumeOSD.exe", "", 0)
-    task_bar_reset()
-}
-
-SetTimer, restart_programs, -1
-restart_programs() {
-    Process, WaitClose, ZoomIt64.exe, 1
-    Process, Close, ZoomIt64.exe
-    run_as_user("ZoomIt64.exe", "", 0)
-}
-
-task_bar_reset() {
-    WinExist("ahk_class Shell_TrayWnd")
-    SysGet, s, Monitor
-    
-    WM_ENTERSIZEMOVE := 0x0231
-    WM_EXITSIZEMOVE  := 0x0232
-    
-    SendMessage, WM_ENTERSIZEMOVE
-        WinMove, , , sLeft, sBottom, sRight, 0
-    SendMessage, WM_EXITSIZEMOVE
-    SendMessage, WM_ENTERSIZEMOVE
-        WinMove, , , sLeft, sTop, sRight, 0
-    SendMessage, WM_EXITSIZEMOVE
 }
 
 
