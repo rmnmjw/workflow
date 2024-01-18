@@ -90,7 +90,11 @@ class App {
     update() {
         WinGetTitle, t, %APP_SELECTOR%
         if (APP_NAME == "Spotify") {
-            active := RegExMatch(t, ".*Webplayer.*") == 0 && RegExMatch(t, ".* playlist by .*") == 0
+            a := RegExMatch(t, ".*Webplayer.*")
+            b := RegExMatch(t, ".* playlist by .*")
+            c := RegExMatch(t, ".* Spotify$")
+            ; ToolTip, %a% - %b% - %c%
+            active := a == 0 && b == 0 && c == 0
         } else {
             active := RegExMatch(t, ".*[0-9].*") != 0
         }
