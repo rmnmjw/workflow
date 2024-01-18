@@ -102,7 +102,7 @@ web_app_refresh(selector) {
 
 web_app_refresh("WhatsApp ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
 web_app_refresh("Telegram ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
-web_app_refresh("Clockify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
+web_app_refresh("Clockodo* ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
 web_app_refresh("MailHog ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
 ; web_app_refresh("Discord ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
 ; web_app_refresh("Spotify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
