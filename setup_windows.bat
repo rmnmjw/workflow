@@ -75,4 +75,6 @@ winget install -e --id voidtools.Everything.Alpha
 winget install -e --id Winamp.Winamp
 winget install -e --id yt-dlp.yt-dlp
 
+winget install Monitorian -s msstore
+
 pause 
