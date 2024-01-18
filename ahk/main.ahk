@@ -615,6 +615,11 @@ CapsLock::return
 
 
 
+#if !GetKeyState("CapsLock", "P") and WinActive("Steam ahk_class SDL_app ahk_exe steamwebhelper.exe")
+    F13::Send !{f4}
+
+#if !GetKeyState("CapsLock", "P") and WinActive("Freundesliste ahk_class SDL_app ahk_exe steamwebhelper.exe")
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class TaskManagerWindow ahk_exe Taskmgr.exe")
     ^W::
