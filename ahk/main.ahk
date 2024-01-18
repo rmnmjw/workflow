@@ -44,7 +44,7 @@ restart_program_hide_volume_osd() {
     Process, WaitClose, HideVolumeOSD.exe, 1
     Process, Close, HideVolumeOSD.exe
     run_as_user("HideVolumeOSD.exe", "", 0)
-    task_bar_reset()
+    ; task_bar_reset()
 }
 
 SetTimer, restart_programs, -1
