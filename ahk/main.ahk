@@ -280,22 +280,16 @@ explorer_create_new_file() {
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
-hide_volume_osd_move_up() {
-    ; WinGetPos, x, y, width, height, ahk_class WindowsForms10.Window.8.app.0.141b42a_r8_ad1 ahk_exe HideVolumeOSD.exe
-    WinMove, ahk_exe HideVolumeOSD.exe, , A_ScreenWidth-240, 5, 118, 66
-}
-
 vol_up_down(up) {
-    if (up) {
-        Send, {Volume_Up}
-    } else {
-        Send, {Volume_Down}
-    }
-    SoundGet, m
-    m := m + 0.1
-    SoundSet, m
-    SetCapsLockState, AlwaysOff
-    hide_volume_osd_move_up()
+    Critical, On
+    SoundGet, vol
+    Send, {Volume_Down}
+    vol := 0.1 + vol + ((1 + (vol >= 15) + (vol >= 40) + (vol >= 60)) * up)
+    SoundSet, %vol%
+    
+    ; WinMove, ahk_exe HideVolumeOSD.exe, , A_ScreenWidth-240, 5, 118, 66
+    WinMove, ahk_exe HideVolumeOSD.exe, , 18, A_ScreenHeight-80, 118, 66
+    Critical, Off
 }
 
 
@@ -420,8 +414,8 @@ CapsLock::return
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
     
-    Volume_Up::vol_up_down(true)
-    Volume_Down::vol_up_down(false)
+    Volume_Up::vol_up_down(1)
+    Volume_Down::vol_up_down(-1)
     
     #0::TurboPaste.paste(0)
     #1::TurboPaste.paste(1)
@@ -522,8 +516,8 @@ CapsLock::return
     WheelUp::zoomit_zoom_in()
     WheelDown::zoomit_zoom_out()
 
-    !^+Up::vol_up_down(true)
-    !^+Down::vol_up_down(false)
+    !^+Up::vol_up_down(1)
+    !^+Down::vol_up_down(-1)
     
     !^End::
         i := 0
@@ -549,8 +543,8 @@ CapsLock::return
     WheelDown::Send, {WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}
     
 #If GetKeyState("F15", "P")
-    WheelUp::vol_up_down(true)
-    WheelDown::vol_up_down(false)
+    WheelUp::vol_up_down(1)
+    WheelDown::vol_up_down(-1)
     
 #If GetKeyState("F16", "P")
     ; nothing yet
