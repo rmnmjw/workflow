@@ -405,6 +405,14 @@ zoomit_zoom_out() {
 }
 
 
+
+brightness_set(up) {
+    Critical, On
+    Run, Monitorian.exe /set %up%
+    Critical, Off
+}
+
+
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
 ; ;                                                               ; ;
@@ -498,6 +506,10 @@ CapsLock::return
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
     
+
+    Volume_Up::brightness_set("+10")
+    Volume_Down::brightness_set("-10")
+
     j::Left
     k::Up
     l::Down
