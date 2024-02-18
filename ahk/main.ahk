@@ -613,7 +613,9 @@ CapsLock::return
 
 #IfWinActive, ahk_exe vlc.exe
     F13::WinClose, A
-    
+
+#IfWinActive, ahk_class MediaPlayerClassicW ahk_exe mpc-hc64.exe
+    F13::WinClose, A
 
 #If !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe firefox.exe")
     F13::Send ^w
