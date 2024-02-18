@@ -45,6 +45,7 @@ restart_program_alt_snap() {
 SetTimer, restart_program_hide_volume_osd, -1
 restart_program_hide_volume_osd() {
     Process, WaitClose, HideVolumeOSD.exe, 1
+    Sleep, 1000
     Process, Close, HideVolumeOSD.exe
     run_as_user("HideVolumeOSD.exe", "", 0)
     ; task_bar_reset()
