@@ -14,6 +14,8 @@ window_to_bottom_and_activate_topmost() {
     
     if (c == "MozillaWindowClass" && x == "thunderbird.exe") {
         WinMinimize, A
+    } else if (c == "Chrome_WidgetWin_0" && x == "Spotify.exe") {
+        WinClose, A 
     } else {
         WinSet, Bottom, , A
     }
