@@ -477,26 +477,6 @@ CapsLock::return
     ; #q::minimize_current_window()
     #q::window_to_bottom_and_activate_topmost()
     #w::return
-    ; #d::
-    ;     Critical, On
-    ;     DetectHiddenWindows, On
-    ;     WinGet, whnd,, Desktop ahk_class CabinetWClass ahk_exe Explorer.EXE
-    ;     if (whnd != "") {
-    ;         WinGet, curr,, A
-    ;         if (whnd == curr) {
-    ;             DetectHiddenWindows, Off
-    ;             Critical, Off
-    ;             window_to_bottom_and_activate_topmost()
-    ;             return
-    ;         } else {
-    ;             WinActivate, ahk_id %whnd%
-    ;         }
-    ;     } else {
-    ;         RunWait, explorer.exe "C:\Users\rmn\Desktop"
-    ;     }
-    ;     DetectHiddenWindows, Off
-    ;     Critical, Off
-    ; return
     
     #c::Send, {LWin down}{LAlt down}d{LAlt up}{LWin up}
     #s::Send, {LWin down}n{LWin up}
