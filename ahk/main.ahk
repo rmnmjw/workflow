@@ -594,6 +594,15 @@ CapsLock::return
 
 #IfWinActive, ahk_class Chrome_WidgetWin_1 ahk_exe Code.exe
     NumPadDot::Send, .
+    F5::
+        WinGet, hwnd
+        
+        WinActivate, ahk_class MozillaWindowClass ahk_exe firefox.exe
+        WinWaitActive, ahk_class MozillaWindowClass ahk_exe firefox.exe
+        Send, {F5}
+        
+        WinActivate, ahk_id %hwnd%
+    Return
 
 #IfWinActive, ahk_class SWT_Window0 ahk_exe eclipse.exe
     NumPadDot::Send, .
