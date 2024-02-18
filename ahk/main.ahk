@@ -51,8 +51,8 @@ restart_program_hide_volume_osd() {
     ; task_bar_reset()
 }
 
-SetTimer, restart_programs, -1
-restart_programs() {
+SetTimer, restart_zoom_it, -1
+restart_zoom_it() {
     Process, WaitClose, ZoomIt64.exe, 1
     Process, Close, ZoomIt64.exe
     run_as_user("ZoomIt64.exe", "", 0)
