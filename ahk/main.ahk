@@ -284,15 +284,15 @@ explorer_create_new_file() {
 ;                                                               ; 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 
+
 vol_up_down(up) {
+    global vol_win_existing
     Critical, On
+    SoundSet, 0, Master, mute ; unmute
     SoundGet, vol
-    Send, {Volume_Down}
-    vol := 0.1 + vol + ((1 + (vol >= 15) + (vol >= 40) + (vol >= 60)) * up)
+    vol := Round(0.1 + vol + ((1 + (vol >= 15) + (vol >= 40) + (vol >= 60)) * up))
     SoundSet, %vol%
     
-    ; WinMove, ahk_exe HideVolumeOSD.exe, , A_ScreenWidth-240, 5, 118, 66
-    WinMove, ahk_exe HideVolumeOSD.exe, , 18, A_ScreenHeight-80, 118, 66
     update_info()
 
     Critical, Off
