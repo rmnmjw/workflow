@@ -167,6 +167,13 @@ ExitFunc(ExitReason, ExitCode) {
     Sleep, 100
 }
 
+
+#if GetKeyState("CapsLock", "P")
+
+    ^!Numpad0::
+        App.toggle()
+    Return
+
 #if !GetKeyState("CapsLock", "P") and WinActive(APP_SELECTOR)
     #Q::App.close()
     
