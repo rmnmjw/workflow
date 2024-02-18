@@ -1,142 +1,4 @@
-﻿#MaxHotkeysPerInterval 200
-CoordMode, Mouse, Screen
-
-
-; #include WebSocket.ahk
-
-
-
-; NETWORK DATA VIA WEBSOCKET
-; ib_network_counter := 0
-; ib_network_data_default := "? 🔽   ?.?b 🔼   ?.?b"
-; ib_network_data    := ib_network_data_default
-; ib_network_data_get() {
-;     global ib_network_data
-;     return ib_network_data
-; }
-; class NetworkViaWebsocket extends WebSocket {
-    
-;     OnMessage(Event) {
-;         global ib_network_data, ib_network_counter
-;         ib_network_counter := 10
-;         ib_network_data := Event.data
-;     }
-    
-;     OnClose(Event) {
-;         global ib_network_data, ib_network_counter, ib_network_data_default
-;         ib_network_counter := 3
-;         this.Disconnect()
-;         ib_network_data := ib_network_data_default
-;         ; MsgBox, WebSocket connection closed
-;     }
-    
-;     OnError(Event) {
-;         global ib_network_data, ib_network_counter, ib_network_data_default
-;         ib_network_counter := 3
-;         ib_network_data := ib_network_data_default
-;         ; MsgBox, WebSocket connection error
-;     }
-; }
-
-
-
-
-
-; WEATHER DATA VIA WEBSOCKET
-; ib_weather_counter := 0
-; ib_weather_data_default := "❓ +??°C ??km/h ❓?.?mm ❓????hPa"
-; ib_weather_data := ib_weather_data_default
-; ib_weather_data_sunrise_default := "☀ ??:?? 🌙 ??:??"
-; ib_weather_data_sunrise := ib_weather_data_sunrise_default
-; ib_weather_data_sunrise_get()
-; {
-;     global ib_weather_data_sunrise
-;     return ib_weather_data_sunrise
-; }
-; ib_weather_data_get() {
-;     global ib_weather_data
-;     return ib_weather_data
-; }
-; class WeatherViaWebsocket extends WebSocket {
-    
-;     OnMessage(Event) {
-;         global ib_weather_data, ib_weather_data_sunrise, ib_weather_counter
-        
-;         ib_weather_counter := 10 * 60
-        
-;         parts := StrSplit(Event.data, "|||")
-                
-;         ib_weather_data         := parts[1]
-;         ib_weather_data_sunrise := parts[2]
-;     }
-    
-;     OnClose(Event) {
-;         global ib_weather_data, ib_weather_data_sunrise, ib_weather_counter, ib_weather_data_sunrise_default, ib_weather_data_default
-;         this.Disconnect()
-;         ib_weather_counter := 3
-;         ib_weather_data := ib_weather_data_default
-;         ib_weather_data_sunrise := ib_weather_data_sunrise_default
-;         ; MsgBox, WebSocket connection closed
-;     }
-    
-;     OnError(Event) {
-;         global ib_weather_data, ib_weather_data_sunrise, ib_weather_counter, ib_weather_data_sunrise_default, ib_weather_data_default
-;         ib_weather_counter := 3
-;         ib_weather_data := ib_weather_data_default
-;         ib_weather_data_sunrise := ib_weather_data_sunrise_default
-;         ; MsgBox, WebSocket connection error
-;     }
-; }
-
-
-
-
-; websocket_reconnector()
-; {
-;     global ib_network_counter, ib_network_data, ib_network_data_default
-;     global ib_weather_counter, ib_weather_data, ib_weather_data_sunrise, ib_weather_data_default
-    
-    
-;     ib_network_counter -= 1
-;     ib_weather_counter -= 1
-    
-;     ; ToolTip, %ib_network_counter% -- %ib_weather_counter%
-    
-    
-;     if (ib_network_counter <= 0 && ib_network_data == ib_network_data_default)
-;     {
-;         ib_network_counter := 10
-;         new NetworkViaWebsocket("ws://localhost:13254")
-;     }
-    
-;     if (ib_weather_counter <= 0 && ib_weather_data == ib_weather_data_default)
-;     {
-;         ib_weather_counter := 10
-;         new WeatherViaWebsocket("ws://localhost:13255")
-;     }
-; }
-; websocket_reconnector()
-; SetTimer, websocket_reconnector, 1000
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-space_fill(t, l:=3, f:=" ") {
+﻿space_fill(t, l:=3, f:=" ") {
     r := l-StrLen(t)
     loop, %r% {
         t := f . t
@@ -193,21 +55,23 @@ get_battery_status() {
     return "🔋" . charging . " " . battery . "%" 
 }
 
-
 ; https://www.reddit.com/r/AutoHotkey/comments/liicqk/real_total_system_cpu_usage_from_within_an/gn4881q/?context=3
 GetSystemTimes(ByRef IdleTime) {
    DllCall("GetSystemTimes", "Int64P", IdleTime, "Int64P", KernelTime, "Int64P", UserTime)
    Return KernelTime + UserTime
 }
 
-get_cpu_time() {
+string_cpu_time := "🧠 999%"
+refresh_cpu_time()
+SetTimer, refresh_cpu_time, 1000
+refresh_cpu_time() {
+    global string_cpu_time
     static cpu_total_a, cpu_total_b, cpu_idle_a, cpu_idle_b
-    cpu_total_b := GetSystemTimes(cpu_idle_b)
-    cpu_time    := round(100*(1 - (cpu_idle_b - cpu_idle_a)/(cpu_total_b - cpu_total_a)))
-    cpu_time    := "🧠" . space_fill(cpu_time, 3) . "%"
-    cpu_total_a := cpu_total_b
-    cpu_idle_a  := cpu_idle_b
-    return cpu_time
+    cpu_total_b     := GetSystemTimes(cpu_idle_b)
+    cpu_time        := round(100*(1 - (cpu_idle_b - cpu_idle_a)/(cpu_total_b - cpu_total_a)))
+    string_cpu_time := "🧠" . space_fill(cpu_time, 3) . "%"
+    cpu_total_a     := cpu_total_b
+    cpu_idle_a      := cpu_idle_b
 }
 
 ; https://autohotkey.com/board/topic/35785-find-system-memory-ram/?p=225248
@@ -236,37 +100,12 @@ get_time() {
     return e[c] . " " . t
 }
 
-set_volume(v) {
-    static last_value  := 0
-    static last_time   := A_TickCount
-    static value_count := 0
-    
-    SoundGetWaveVolume, volume
-    
-    if (last_value != v || (last_time + 200) < A_TickCount)
-        value_count := 0
-    value_count := Min(value_count+1, 7)
-    vol := v * Min(2 ** (value_count**2), 32) * Max(volume/100, 0.1)
-    
-    if (v > 0)
-        vol := "+" . vol
-    vol := vol . "%"
-
-    SoundSetWaveVolume, %vol%
-    SetTimer, update_info, Off
-    update_info()
-    SetTimer, update_info, 1000
-    
-    last_value := v
-    last_time  := A_TickCount
-}
-
 get_volume_volume_virtual_delta := 0
 get_volume_volume := 0
 get_volume_muted := 0
 get_volume() {
     global get_volume_volume_virtual_delta, get_volume_volume, get_volume_muted
-    
+
     if (get_volume_volume_virtual_delta == 0) {
         SoundGet, get_volume_volume
         SoundGet, get_volume_muted, , MUTE
@@ -288,39 +127,39 @@ get_volume() {
 }
 
 ; window title: $if(%isplaying%, $if(%ispaused%,⏸️,🎵) '['%playback_time%[/%length%]']',⏹️) [%artist% -] %title%
-ib_foobar_window_id = false
-get_foobar_id_runner() {
-    global ib_foobar_window_id
-    DetectHiddenWindows, On
-    WinGet, hwnd, id, ahk_class {97E27FAA-C0B3-4b8e-A693-ED7881E99FC1} ahk_exe foobar2000.exe
-    DetectHiddenWindows, Off
-    if (hwnd == "") {
-        ib_foobar_window_id := false
-    } else {
-        ib_foobar_window_id := hwnd
-    }
-}
-; get_foobar_id_runner()
+; ib_foobar_window_id = false
+; get_foobar_id_runner() {
+;     global ib_foobar_window_id
+;     DetectHiddenWindows, On
+;     WinGet, hwnd, id, ahk_class {97E27FAA-C0B3-4b8e-A693-ED7881E99FC1} ahk_exe foobar2000.exe
+;     DetectHiddenWindows, Off
+;     if (hwnd == "") {
+;         ib_foobar_window_id := false
+;     } else {
+;         ib_foobar_window_id := hwnd
+;     }
+; }
+; ; get_foobar_id_runner()
 
-SetTimer, get_foobar_id_runner, 5000
-get_foobar_song() {
-    global ib_foobar_window_id
-    if (!ib_foobar_window_id) {
-        return "  |  🟩 [  :  /  :  ] -"
-    }
-    DetectHiddenWindows, On
-    WinGetTitle, t, ahk_id %ib_foobar_window_id%
-    DetectHiddenWindows, Off
+; SetTimer, get_foobar_id_runner, 5000
+; get_foobar_song() {
+;     global ib_foobar_window_id
+;     if (!ib_foobar_window_id) {
+;         return "  |  🟩 [  :  /  :  ] -"
+;     }
+;     DetectHiddenWindows, On
+;     WinGetTitle, t, ahk_id %ib_foobar_window_id%
+;     DetectHiddenWindows, Off
     
-    t := Trim(t)
-    if (SubStr(t, 1, 10) == "foobar2000")
-        return ""
-    if (t == "")
-        return ""
-    l := StrLen(t)
-    t := SubStr(t, 1, l-12)
-    return "  |  " . t
-}
+;     t := Trim(t)
+;     if (SubStr(t, 1, 10) == "foobar2000")
+;         return ""
+;     if (t == "")
+;         return ""
+;     l := StrLen(t)
+;     t := SubStr(t, 1, l-12)
+;     return "  |  " . t
+; }
 
 get_disk_space(n) {
     d := n . ":\"
@@ -337,256 +176,207 @@ get_disk_space_free_gb(n) {
 }
 
 
-; get_weather_data := ""
-; get_weather_data_sun := ""
-; get_sunrise_sunset() {
-;     global get_weather_data_sun
-;     return get_weather_data_sun
-; }
-; get_weather() {
-;     global get_weather_data
-;     return get_weather_data
-; }
-; ib_refresh_weather() {
-;     global get_weather_data, get_weather_data_sun
-;     WEATHER_TEMP_FILE := A_Temp . "\infobar_weather.ini"
-;     IniRead, wu, %WEATHER_TEMP_FILE%, wttr, updated, Default
-    
-;     IniRead, ww, %WEATHER_TEMP_FILE%, wttr, weather, Default
-;     IniRead, st, %WEATHER_TEMP_FILE%, wttr, sunrise_sunset, Default
-;     if (wu == 0) {
-;         ww := "?" . ww
-;     } else {
-;         wu -= 1
-;         IniWrite, %wu%, %WEATHER_TEMP_FILE%, wttr, updated
-;     }
-;     get_weather_data := ww
-;     get_weather_data_sun := st
-; }
-; ib_refresh_weather()
-; SetTimer, ib_refresh_weather, 300000 ; 5 minutes
+string_weather := ""
+string_weather_refresh()
+SetTimer, string_weather_refresh, 900000
+string_weather_refresh() {
+    global string_weather
+    whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+    w.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+    whr.Open("GET", "https://wttr.in/?format=2", true)
+    whr.Send()
+    whr.WaitForResponse()
+    tmp := StrSplit(whr.ResponseText, "km/h")[1]
+    tmp := StrReplace(StrReplace(tmp, "   ", " "), " ", "  ")
+    tmp := StrReplace(StrReplace(tmp, "🌡", "|  🌡 "), "🌬", "|  🌬 ")
+    string_weather := "[ " . tmp . " ]"
+}
 
 SCREEN_SCALE_FACTOR := A_ScreenDPI / 96
 SCREEN_WIDTH  :=  A_ScreenWidth / SCREEN_SCALE_FACTOR
 SCREEN_HEIGHT := A_ScreenHeight / SCREEN_SCALE_FACTOR
 
 Gui, Color, 101010, white
-Gui, Font, s11L, Fira Code
+Gui, Font, s11L, Courier Prime BC
 placeholder := "~" . space_fill("", l:=272, f:="X") . "~"
 gw := SCREEN_WIDTH
 gh := 24
-gy := A_ScreenHeight-gh
-ToolTip,  %w%
-Gui, add, text, vTheInfo cFFFFFF y-2 x2 w%gw%, %placeholder%
-GuiControl, +Center, TheInfo
+gy := 0 ;A_ScreenHeight-gh
+Gui, add, text, vTheInfoLeft cE3E3E3 y-2 x0 w%gw% left, %placeholder%
+Gui, add, text, vTheInfoCenter cE3E3E3 y-2 x0 w%gw% center, %placeholder%
+Gui, add, text, vTheInfoRight cE3E3E3 y-2 x0 w%gw% right, %placeholder%
+GuiControl, +BackgroundTrans, TheInfoLeft
+GuiControl, +BackgroundTrans, TheInfoRight
+GuiControl, +BackgroundTrans, TheInfoCenter
 Gui, +Resize +AlwaysOnTop +ToolWindow -Caption +LastFound
 ; https://www.autohotkey.com/boards/viewtopic.php?t=77668
 Gui, +E0x02000000 +E0x00080000 ; WS_EX_COMPOSITED & WS_EX_LAYERED => Double Buffer
 Gui, show, x1414 y%gy% w500 h24 NoActivate
+            
 
 hwnd_info_bar := WinExist()
-WinMove, ahk_id %hwnd_info_bar%, , 0, gy, %A_ScreenWidth%, 15
+WinMove, ahk_id %hwnd_info_bar%, , 0, gy, %A_ScreenWidth%, gh
+WinMove, WinTitle, WinText, X, Y, [Width, Height, ExcludeTitle, ExcludeText]
 
 WinSet, Style, -0xC40000, ahk_id %hwnd_info_bar%
 
 ; https://www.autohotkey.com/board/topic/30503-turn-any-application-into-an-appbar/
-reserve_space_on_bottom(height) {
+reserve_space_on_top(height) {
     VarSetCapacity( APPBARDATA , (cbAPPBARDATA := A_PtrSize == 8 ? 48 : 36), 0 )
-    Off :=  NumPut(  cbAPPBARDATA, APPBARDATA, "Ptr" )
-    Off :=  NumPut( hAB, Off+0, "Ptr" )
-    Off :=  NumPut( ABM, Off+0, "UInt" )
-    Off :=  NumPut(   3, Off+0, "UInt" ) 
-    Off :=  NumPut(  GX, Off+0, "Int" ) 
-    Off :=  NumPut(  A_ScreenHeight-height, Off+0, "Int" ) 
-    Off :=  NumPut(  GW, Off+0, "Int" ) 
-    Off :=  NumPut(  height, Off+0, "Int" )
-    ;MsgBox % Off - &APPBARDATA
-    Off :=  NumPut(   1, Off+0, "Ptr" )
+    Off := NumPut(  cbAPPBARDATA, APPBARDATA, "Ptr"  )
+    Off := NumPut(           hAB,      Off+0, "Ptr"  )
+    Off := NumPut(           ABM,      Off+0, "UInt" )
+    Off := NumPut(             1,      Off+0, "UInt" ) 
+    Off := NumPut(             0,      Off+0, "Int"  ) 
+    Off := NumPut(             0,      Off+0, "Int"  ) 
+    Off := NumPut(             0,      Off+0, "Int"  ) 
+    Off := NumPut(        height,      Off+0, "Int"  )
+    Off := NumPut(             1,      Off+0, "Ptr"  )
 
     DllCall("Shell32.dll\SHAppBarMessage", UInt,(ABM_NEW:=0x0)     , Ptr,&APPBARDATA )
     DllCall("Shell32.dll\SHAppBarMessage", UInt,(ABM_QUERYPOS:=0x2), Ptr,&APPBARDATA )
     DllCall("Shell32.dll\SHAppBarMessage", UInt,(ABM_SETPOS:=0x3)  , Ptr,&APPBARDATA )
 }
-reserve_space_on_bottom(0)
-
-; SetTimer, update_info_top, 250
-; update_info_top() {
-;     global hwnd_info_bar
-;     WinSet, alwaysontop, on, ahk_id %hwnd_info_bar%
-; }
+reserve_space_on_top(gh)
 
 SetTimer, update_info_fs, 250
 update_info_fs() {
     global hwnd_info_bar, SCREEN_WIDTH, SCREEN_HEIGHT
-    
     
     WinGetClass, clazz, A
     if (clazz == "WorkerW")
         return
     if (clazz == "Progman")
         return
-    
 
     WinGetPos x, y, w, h, A
-    if (x == -12 && y == 40 && w == 3864 && h == 2108) {
-        WinGetPos, , winy, , , ahk_id %hwnd_info_bar%
+    WinGetPos, , winy, , , ahk_id %hwnd_info_bar%
+    if (x == 0 && y == 0 && w == 3840 && h == 2160) {
         if (winy >= 0) {
-            ToolTip, "HIDE"
-            info_visibility("hide")
+            WinMove, ahk_id %hwnd_info_bar%, , , -1337
         }
     } else {
-        WinGetPos, , winy, , , ahk_id %hwnd_info_bar%
         if (winy < 0) {
-            ToolTip, "SHOW"
-            info_visibility("show")
+            WinMove, ahk_id %hwnd_info_bar%, , , 0
         }
     }
     
 }
 
 get_desktop() {
-    global desktop_current
-    desk := desktop_current + 1
-    return "🖥️ " . space_fill(desk, 2)
+    RegRead, cur, HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\SessionInfo\1\VirtualDesktops, CurrentVirtualDesktop
+    RegRead, all, HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops, VirtualDesktopIDs
+    desk := floor(InStr(all,cur) / strlen(cur))
+    return "🖥️ " . desk
 }
 
-seconds_to_minutes_and_hours(secs) {
-    hours := floor(secs / 60 / 60)
-    mins := floor(secs / 60) - hours * 60
-    secs := secs - hours * 60 * 60 - mins * 60
-    
-    if (hours < 10) {
-        hours := "0" . hours
+get_clockodo() {
+    DetectHiddenWindows, On
+        WinGetTitle, t, Clockodo* ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe
+    DetectHiddenWindows, Off
+
+    t := Trim(StrReplace(t, "Clockodo*"))
+    if (t == "") {
+        t := "00:00:00"
     }
-    
-    hours := hours . ":"
-    
-    if (mins < 10) {
-        mins := "0" . mins
-    }
-    mins := mins . ":"
-    
-    if (secs < 10) {
-        secs := "0" . secs
-    }
-    
-    return hours . mins . secs
+    return "⏱ " . t
 }
 
-ib_start_alarm_set := 0
-ib_alarm_toggle := true
-get_alarm() {
-    global ib_start_alarm_set, ib_alarm_toggle
-    if (!ib_start_alarm_set) {
-        return "  |  ⏰   :  :  "
-    }
-    rem_secs := floor(ib_start_alarm_set - A_TickCount / 1000)
+string_external_timer := ""
+SetTimer, refresh_external_timer, 10000
+refresh_external_timer()
+refresh_external_timer() {
+    global string_external_timer
+    static path := A_Temp . "\external_timer.txt"
+    FileRead, s, %path%
+    string_external_timer := "⌚ " . Trim(s)
+}
+
+
+
+
+get_spotify_song() {
+    static title, hwnd := false, force := true
+    mode := "⏸"
     
-    if (rem_secs <= 0) {
-        if (ib_alarm_toggle) {
-            Gui, Color, red, white
-        } else {
-            Gui, Color, 101010, white
+    DetectHiddenWindows, On
+        t := ""
+        if (hwnd) {
+            WinGetTitle, t, ahk_id %hwnd%
+            t := Trim(t)
+            if (t == "") {
+                force := true
+            }
         }
-        ib_alarm_toggle := !ib_alarm_toggle
-        rem_secs := 0
-        
-        if (ib_alarm_toggle) {
-            return "  |  ⏰ XX:XX:XX"
-        } else {
-            return "  |  ⏰   :  :  "
+        if (force) {
+            WinGet, id, list
+            Loop, %id% {
+                this_ID := id%A_Index%
+                WinGetTitle, tmp, ahk_id %this_ID%
+                tmp := Trim(tmp)
+                WinGetClass, clazz, ahk_id %this_ID%
+                if (clazz == "Chrome_WidgetWin_0" && tmp != "" && !InStr(tmp, "Default IME")) {
+                    t := tmp
+                    hwnd := this_ID
+                    force := false
+                }
+            }
         }
-    } else {
-        return "  |  ⏰ " . seconds_to_minutes_and_hours(rem_secs)
+    DetectHiddenWindows, Off
+    
+    if (t != "Spotify Premium" && t != "Spotify") {
+        title := t
+        if (StrLen(title) > 80) {
+            title := SubStr(title, 1, 80) . " ..."
+        }
+        mode := "▶"
     }
-}
-ib_start_alarm() {
-    global ib_start_alarm_set, ib_alarm_toggle
-    InputBox, minute_input, Start Alarm, Minutes:, , 300, 150
-    ib_alarm_toggle := true
-    if (minute_input == "") {
-        ib_start_alarm_set := 0
-    } else {
-        ib_start_alarm_set := floor(A_TickCount / 1000 + minute_input * 60)
+    if (t == "") {
+        return "🎶 Spotify not found 🎵"
     }
-    Gui, Color, 101010, white
-    update_info()
+    if (title == "") {
+        title := "No recent song"
+    }
+    return mode . " " . title
 }
-
-info_alert  := false
-info_stable := ""
 
 
 update_info() {
-    global info_alert, info_stable, hwnd_info_bar
+    global string_external_timer, string_weather, string_cpu_time
     
+    info_left := " [ " . get_desktop() . " ]    [ " . get_spotify_song() . " ]"
+    GuiControl,, TheInfoLeft, %info_left%
+
+    info_center := "[ " . get_date() . "  |  " . get_time() . " ]  🏃‍♂️  [ " . get_clockodo() . "  |  " . string_external_timer . " ]         "
+    GuiControl,, TheInfoCenter, %info_center%
     
-    
-    if (info_alert) {
-        info := "*** " . info_alert . " ***"
-        GuiControl,, TheInfo, %info%
-    } else {
-        info_stable := ""
-        info_stable .= get_alarm()
-        info_stable .= "  |  " . get_date()
-        info_stable .= "  |  " . get_time()
-        ; info_stable .= "  |  " . ib_weather_data_sunrise_get()
-        info_stable .= "  |  " . get_cpu_time()
-        info_stable .= "  |  " . get_ram_usage()
-        info_stable .= "  |  " . get_disk_space_free_gb("C")
-        ; info_stable .= "  |  " . get_disk_space_free_gb("D")
-        ; info_stable .= "  |  " . get_battery_status()
-        ; info_stable .= "  |  " . ib_weather_data_get()
-        ; info_stable .= "  |  " . ib_network_data_get()
-        
-        
-        update_info_unstable()
-    }
+    info_right := string_weather . "    [ " . get_disk_space_free_gb("C") . "  |  " . get_ram_usage() . "  |  " . string_cpu_time . " ]    [ " . get_volume() . " ] "
+    GuiControl,, TheInfoRight, %info_right%
     
     Winset, Alwaysontop, ahk_id %hwnd_info_bar%, A
 }
 update_info()
 SetTimer, update_info, 1000
 
-update_info_unstable_2() {
-    global info_stable
-    info := ""
-    ; info .= get_desktop()
-    info .= info_stable
-    info .= "  |  " . get_volume()
-    ; info .= get_foobar_song()
-    GuiControl,, TheInfo, %info%
-}
-
-update_info_unstable(slow:=0) {
-    if (slow != 0) {
-        Sleep, %slow%
+info_bar_mouse_move(button) {
+    global hwnd_info_bar
+    MouseGetPos, x, y, hwnd_m
+    if (hwnd_m != hwnd_info_bar) {
+        return
     }
-    update_info_unstable_2()
+    MouseClick, %button%, , , , 1, U
+    MouseClick, %button%, x, 25, , 1, D
 }
 
-info_visibility(mode:="toggle") {
-    global hwnd_info_bar, gy
-    
-    if (mode == "toggle") {
-        WinGetPos, , y, , , ahk_id %hwnd_info_bar%
-        y := y == -1337 ? 1065 : -1337
-    } else if (mode == "show") {
-        y := 1065
-    } else if (mode == "hide") {
-        y := -1337
-    }
-    
-    WinMove, ahk_id %hwnd_info_bar%, , , %gy%
-}
+~LButton::info_bar_mouse_move("L")
+~MButton::info_bar_mouse_move("M")
+~RButton::info_bar_mouse_move("R")
 
-
-
-
-
-
-
-
+~#^Left::
+~#^Right::
+    Sleep, 100
+    update_info()
+Return
 
 ; #######################
 ; #      BENCHMARK      #
@@ -612,142 +402,3 @@ info_visibility(mode:="toggle") {
 ; MsgBox, DONE.      %total% ms;      %one% ms
 ; Critical, Off
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-; !^+ö::ib_start_alarm()
-
-; Volume_Up::
-;     Critical, On
-;     SoundSet, +2
-;     update_info_unstable()
-;     Critical, Off
-; return
-
-; Volume_Down::
-;     Critical, On
-;     SoundSet, -2
-;     update_info_unstable()
-;     Critical, Off
-; return
-
-; Volume_Mute::
-;     Critical, On
-;     Send, {Volume_Mute}
-;     update_info_unstable()
-;     Critical, Off
-; return
-
-; Media_Play_Pause::
-; #<::
-;     Critical, On
-;     Send, {Media_Play_Pause}
-;     update_info_unstable()
-;     Critical, Off
-; return
-
-; Media_Next::
-;     Critical, On
-;     Send, {Media_Next}
-;     update_info_unstable()
-;     Critical, Off
-; return
-
-; Media_Prev::
-;     Critical, On
-;     Send, {Media_Prev}
-;     update_info_unstable()
-;     Critical, Off
-; return
-
-; Media_Stop::
-;     Critical, On
-;     Send, {Media_Stop}
-;     update_info_unstable()
-;     Critical, Off
-; return
-
-info_bar_mouse_move(button) {
-    global hwnd_info_bar
-    MouseGetPos, x, y, hwnd_m
-    if(hwnd_m != hwnd_info_bar){
-        return
-    }
-    MouseClick, %button%, , , , 1, U
-    MouseClick, %button%, x, 16, , 1, D
-}
-
-
-; ~LButton::info_bar_mouse_move("L")
-; ~MButton::info_bar_mouse_move("M")
-; ~RButton::info_bar_mouse_move("R")
-
-
-; # # # # # # # # # # # # # # # # # # # # # #
-; #                                         #
-; #      Volume control via mouse wheel     #
-; #                                         #
-; # # # # # # # # # # # # # # # # # # # # # #
-
-ib_volume_scroll(dir) {
-    Critical, On
-        global hwnd_info_bar, get_volume_volume_virtual_delta, get_volume_volume
-        MouseGetPos, , , id, control
-        WinGetClass, clazz, ahk_id %id%
-        if (id == hwnd_info_bar || clazz == "Shell_TrayWnd") {
-            if (dir > 0) {
-                SoundSet, +2
-                get_volume_volume_virtual_delta += 2
-                if (get_volume_volume_virtual_delta + get_volume_volume > 100) {
-                    get_volume_volume_virtual_delta := 0
-                    get_volume_volume := 100
-                }
-            } else if (dir < 0) {
-                SoundSet, -2
-                get_volume_volume_virtual_delta -= 2
-                if (get_volume_volume_virtual_delta + get_volume_volume < 0) {
-                    get_volume_volume_virtual_delta := 0
-                    get_volume_volume := 0
-                }
-            }
-            update_info_unstable()
-        }
-    Critical, Off
-}
-
-~WheelDown::ib_volume_scroll(-1)
-~WheelUp::ib_volume_scroll(1)
-
-~!^+Up::update_info_unstable()
-~!^+Down::update_info_unstable()
-
-#If GetKeyState("CapsLock", "P")
-    ~WheelUp::
-        update_info_unstable(20)
-    return
-    ~WheelDown::
-        update_info_unstable(20)
-    return
-
-#If WinActive("ahk_class Windows.UI.Core.CoreWindow ahk_exe ShellExperienceHost.exe")
-    ~WheelDown::
-        Critical, On
-            update_info_unstable()
-        Critical, Off
-    Return
-    ~WheelUp::
-        Critical, On
-            update_info_unstable()
-        Critical, Off
-    Return
-#If

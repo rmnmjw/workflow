@@ -24,6 +24,9 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 
 #include lib/run_as_user.ahk
 #include lib/window_to_bottom_and_activate_topmost.ahk
+; #include screen_time.ahk
+; #include external_timer.ahk
+#include info_bar.ahk
 
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 ;                                                               ; 
@@ -289,6 +292,8 @@ vol_up_down(up) {
     
     ; WinMove, ahk_exe HideVolumeOSD.exe, , A_ScreenWidth-240, 5, 118, 66
     WinMove, ahk_exe HideVolumeOSD.exe, , 18, A_ScreenHeight-80, 118, 66
+    update_info()
+
     Critical, Off
 }
 
@@ -416,6 +421,15 @@ CapsLock::return
     
     Volume_Up::vol_up_down(1)
     Volume_Down::vol_up_down(-1)
+    
+    ~Volume_Mute::
+    ~Media_Next::
+    ~Media_Play_Pause::
+    ~Media_Prev::
+    ~Media_Stop::
+        Sleep, 100
+        update_info()
+    return
     
     #0::TurboPaste.paste(0)
     #1::TurboPaste.paste(1)
