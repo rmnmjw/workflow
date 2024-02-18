@@ -474,8 +474,8 @@ CapsLock::return
         WinActivate, Windows PowerShell
     return
     
-    ; #q::minimize_current_window()
     #q::window_to_bottom_and_activate_topmost()
+    
     #w::return
     
     #c::Send, {LWin down}{LAlt down}d{LAlt up}{LWin up}
@@ -486,6 +486,8 @@ CapsLock::return
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
     
+    #q::minimize_current_window()
+
 
     Volume_Up::brightness_set("+10")
     Volume_Down::brightness_set("-10")
