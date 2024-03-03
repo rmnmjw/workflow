@@ -1,4 +1,6 @@
-﻿space_fill(t, l:=3, f:=" ") {
+﻿#include lib/change_any_tray_icon.ahk
+
+space_fill(t, l:=3, f:=" ") {
     r := l-StrLen(t)
     loop, %r% {
         t := f . t
@@ -420,8 +422,9 @@ get_spotify_song() {
     } else {
         return false
     }
-    if (t == "" || spotify_title == "")
+    if (t == "" || spotify_title == "") {
         return false
+    }
     return spotify_title
 }
 

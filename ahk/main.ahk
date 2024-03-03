@@ -447,7 +447,7 @@ CapsLock::return
     ~Media_Prev::
     ~Media_Stop::
         Sleep, 100
-        ib_update_instable()
+        ib_update_instable(true)
     return
     
     #0::TurboPaste.paste(0)
@@ -539,7 +539,6 @@ CapsLock::return
     Numpad4::key_disabled()
     Numpad5::key_disabled()
     Numpad6::key_disabled()
-    NumpadAdd::key_disabled()
     NumpadMult::key_disabled()
     NumpadDiv::key_disabled()
     NumpadSub::key_disabled()

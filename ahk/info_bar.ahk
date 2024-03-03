@@ -128,7 +128,7 @@ id_update_async() {
 }
 
 SetTimer, ib_update_instable, 500
-ib_update_instable() {
+ib_update_instable(force:=false) {
     global ib_str_weather
     
     static sp_current, sp_current_playing, ib_str_time, sp_last := false
@@ -144,6 +144,7 @@ ib_update_instable() {
         sp_current := "No latest song found ..."
         sp_current_playing := false
     }
+    spotify_set_icon(sp_current_playing, force)
     
     info_left := " [ " . get_desktop() . " ]    [ " . sp_current . " ] " . get_dancing(sp_current_playing)
     GuiControl,, TheInfoLeft, %info_left%
