@@ -13,6 +13,7 @@ SetBatchLines -1 ; Determines how fast a script will run (affects CPU utilizatio
 #MaxHotkeysPerInterval 800
 SetWinDelay, 0
 
+is_manual_launch := A_Args[1] == "--launch"
 
 global APP_NAME, global APP_SELECTOR, global APP_RUN
 
@@ -32,6 +33,7 @@ class App {
     static init := True
     
     open() {
+        App.launch_if_needed()
         WinRestore, %APP_SELECTOR%
         if (App.TO_TRAY) {
             WinShow, %APP_SELECTOR%
@@ -130,7 +132,11 @@ class App {
 }
 
 App.update()
-App.to_tray_if_needed()
+if (is_manual_launch) {
+    App.open()
+} else {
+    App.to_tray_if_needed()
+}
 
 SetTimer, timer2, 5000
 timer2() {
