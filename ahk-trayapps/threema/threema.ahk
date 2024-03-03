@@ -3,3 +3,9 @@ APP_SELECTOR := "ahk_class Chrome_WidgetWin_1 ahk_exe ThreemaDesktop.exe"
 APP_RUN      := False
 
 #include ../App.ahk
+
+#if GetKeyState("CapsLock", "P")
+
+    NumpadAdd::
+        App.toggle()
+    Return
