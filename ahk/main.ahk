@@ -30,6 +30,13 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 
 ; #include lib/benchmark.ahk
 
+key_disabled() {
+    ToolTip, Not mapped
+    Sleep, 500
+    ToolTip
+}
+
+
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 ;                                                               ; 
 ;                    Close and Start Programs                   ;
@@ -488,6 +495,55 @@ CapsLock::return
 
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
+
+    toggle_program(selector_in, path) {
+        Critical, On
+        
+        if (selector_in == "__SPOTIFY__") {
+            WinGet, id, list
+            Loop, %id% {
+                this_ID := id%A_Index%
+                WinGet, exe, ProcessName, ahk_id %this_ID%
+                if (exe == "Spotify.exe") {
+                    WinGetClass, clazz, ahk_id %this_ID%
+                    if ((clazz == "Chrome_WidgetWin_0" || clazz == "Chrome_WidgetWin_1")) {
+                        selector := "ahk_id " . this_ID
+                        break
+                    }
+                }
+            }
+        } else {
+            selector := selector_in
+        }
+        
+        dhw := A_DetectHiddenWindows
+        DetectHiddenWindows, On
+            WinGet, WinState, MinMax, %selector%
+            if (WinState == "" || WinState == -1) {
+                Run, %path%
+            } else {
+                if (selector_in == "__SPOTIFY__") {
+                    WinClose, %selector%
+                } else {
+                    WinMinimize, %selector%
+                }
+            }
+        DetectHiddenWindows, %dhw%
+        Critical, Off
+    }
+    
+    Numpad0::toggle_program("ahk_class MozillaWindowClass ahk_exe thunderbird.exe", "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Thunderbird.lnk")
+    NumpadEnter::toggle_program("__SPOTIFY__", "C:\Users\rmn\AppData\Local\Microsoft\WindowsApps\Spotify.exe")
+    
+    Numpad3::key_disabled()
+    Numpad4::key_disabled()
+    Numpad5::key_disabled()
+    Numpad6::key_disabled()
+    NumpadAdd::key_disabled()
+    NumpadMult::key_disabled()
+    NumpadDiv::key_disabled()
+    NumpadSub::key_disabled()
+    
     
     #q::minimize_current_window()
 
