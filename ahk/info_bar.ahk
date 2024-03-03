@@ -1,7 +1,7 @@
 ﻿#include lib/info_bar_sources_and_helpers.ahk
 
 SHOW_AT_TOP      := true
-COLOR_BACKGROUND := "213841"
+COLOR_BACKGROUND := "213641"
 COLOR_FONT       := "E3E3E3"
 
 Gui, Color, %COLOR_BACKGROUND%, %COLOR_FONT%
