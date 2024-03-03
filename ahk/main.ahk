@@ -28,6 +28,8 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 ; #include external_timer.ahk
 #include info_bar.ahk
 
+; #include lib/benchmark.ahk
+
 ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
 ;                                                               ; 
 ;                    Close and Start Programs                   ;
