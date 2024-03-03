@@ -295,7 +295,7 @@ vol_up_down(up) {
     vol := Round(0.1 + vol + ((1 + (vol >= 15) + (vol >= 40) + (vol >= 60)) * up))
     SoundSet, %vol%
     
-    update_info()
+    ib_update_instable()
 
     Critical, Off
 }
@@ -440,7 +440,7 @@ CapsLock::return
     ~Media_Prev::
     ~Media_Stop::
         Sleep, 100
-        update_info()
+        ib_update_instable()
     return
     
     #0::TurboPaste.paste(0)
