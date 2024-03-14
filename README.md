@@ -4,6 +4,7 @@ In this repo I collect all the things that I use to be productive. The following
 
 ## 0. OS
 * [Windows 10](https://www.microsoft.com/de-de/software-download/windows10)
+* [Windows 11](https://www.microsoft.com/de-de/software-download/windows11)
 
 ## 1. Features
 * Bitlocker
