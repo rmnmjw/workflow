@@ -10,7 +10,7 @@ SetTitleMatchMode, 2
 SetWorkingDir %A_ScriptDir%
 SetWinDelay, 0
 
-#include ../ahk/lib/window_to_bottom_and_activate_topmost.ahk
+#include ../ahk-lib/window_to_bottom_and_activate_topmost.ahk
 
 window_toggle(selector) {
     WinGet, hwnd_have, ID, A

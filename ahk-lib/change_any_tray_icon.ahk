@@ -1,8 +1,8 @@
 #include lib/spotify_get_hwnd.ahk
 
 spotify_set_icon(playing, force:=false) {
-    static hIcon_off := LoadPicture("..\ahk-trayapps\spotify\Spotify.ico", "w24 h-1", IMAGE_ICON := 2)
-    static hIcon_on  := LoadPicture("..\ahk-trayapps\spotify\Spotify_on.ico", "w24 h-1", IMAGE_ICON := 2)
+    static hIcon_off := LoadPicture("..\ahk-trayapps\spotify\Spotify.ico", "w24 h-1", IMAGE_ICON := 1)
+    static hIcon_on  := LoadPicture("..\ahk-trayapps\spotify\Spotify_on.ico", "w24 h-1", IMAGE_ICON := 1)
     static info := false, last_hwnd := false
     
     static next := -1

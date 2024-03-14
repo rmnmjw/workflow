@@ -1,17 +1,33 @@
-﻿#include lib/info_bar_sources_and_helpers.ahk
+﻿#include ../ahk-lib/info_bar_sources_and_helpers.ahk
 
-SHOW_AT_TOP      := true
-COLOR_BACKGROUND := "213641"
-COLOR_FONT       := "E3E3E3"
+SHOW_AT_TOP := true
+COLOR_FONT  := "E3E3E3"
+RegRead, appMode, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme
+if (appMode) {
+    COLOR_BACKGROUND := "213641"
+} else {
+    COLOR_BACKGROUND := "1B1D27"
+}
+
+
 
 Gui, Color, %COLOR_BACKGROUND%, %COLOR_FONT%
 Gui, Font, s11L, Courier Prime BC
 placeholder := "" ;"~" . space_fill("", l:=293, f:="X") . "~"
 WinGetPos, , , margin_left, , ahk_class Shell_TrayWnd ahk_exe explorer.exe
+
 window_width := A_ScreenWidth - margin_left
-gw := A_ScreenWidth / (A_ScreenDPI / 96) - margin_left / (A_ScreenDPI / 96) ; screen width must be scaled to fit width
+if (window_width <= A_ScreenWidth/2) {
+    window_width := A_ScreenWidth
+    margin_left := 0
+}
+desktop_scaling := A_ScreenDPI / 96
+gw := A_ScreenWidth / desktop_scaling - margin_left / desktop_scaling ; screen width must be scaled to fit width
 gh := 25
-gyy := -1
+gyy := 1
+if (desktop_scaling == 1) {
+    gyy := 3
+}
 
 if (SHOW_AT_TOP) {
     gy := 0
@@ -22,6 +38,8 @@ if (SHOW_AT_TOP) {
     reserve_space_on_top(0)
     reserve_space_on_bottom(gh)
 }
+reserve_space_on_top(0)
+reserve_space_on_bottom(0)
 
 Gui, add, text, left   vTheInfoLeft   y%gyy% x0 w%gw% c%COLOR_FONT%, %placeholder%
 Gui, add, text, center vTheInfoCenter y%gyy% x6 w%gw% c%COLOR_FONT%, %placeholder%
@@ -58,14 +76,15 @@ ClipCursor(x1, y1, x2, y2) {
 reserve_space_on_top(height) {
     VarSetCapacity( APPBARDATA, (cbAPPBARDATA := A_PtrSize == 8 ? 48 : 36), 0 )
     Off := NumPut(  cbAPPBARDATA, APPBARDATA, "Ptr"  )
-    Off := NumPut(           hAB,      Off+0, "Ptr"  )
-    Off := NumPut(           ABM,      Off+0, "UInt" )
-    Off := NumPut(             1,      Off+0, "UInt" ) 
-    Off := NumPut(             0,      Off+0, "Int"  ) 
-    Off := NumPut(             0,      Off+0, "Int"  ) 
-    Off := NumPut(             0,      Off+0, "Int"  ) 
-    Off := NumPut(        height,      Off+0, "Int"  )
-    Off := NumPut(             1,      Off+0, "Ptr"  )
+    Off := NumPut(           hAB, Off+0, "Ptr"  )
+    Off := NumPut(           ABM, Off+0, "UInt" )
+    Off := NumPut(             1, Off+0, "UInt" )
+    Off := NumPut(             0, Off+0, "Int"  )
+    Off := NumPut(             0, Off+0, "Int"  )
+    Off := NumPut(             0, Off+0, "Int"  )
+    Off := NumPut(        height, Off+0, "Int"  )
+    Off := NumPut(             1, Off+0, "Ptr"  )
+    
 
     DllCall("Shell32.dll\SHAppBarMessage", UInt, (ABM_NEW      := 0x0), Ptr, &APPBARDATA)
     DllCall("Shell32.dll\SHAppBarMessage", UInt, (ABM_QUERYPOS := 0x2), Ptr, &APPBARDATA)
@@ -76,10 +95,10 @@ reserve_space_on_bottom(height) {
     Off := NumPut(  cbAPPBARDATA, APPBARDATA, "Ptr"  )
     Off := NumPut(                     0, Off+0, "Ptr"  )
     Off := NumPut(                     0, Off+0, "UInt" )
-    Off := NumPut(                     3, Off+0, "UInt" ) 
-    Off := NumPut(                     0, Off+0, "Int"  ) 
-    Off := NumPut( A_ScreenHeight-height, Off+0, "Int"  ) 
-    Off := NumPut(                     0, Off+0, "Int"  ) 
+    Off := NumPut(                     3, Off+0, "UInt" )
+    Off := NumPut(                     0, Off+0, "Int"  )
+    Off := NumPut( A_ScreenHeight-height, Off+0, "Int"  )
+    Off := NumPut(                     0, Off+0, "Int"  )
     Off := NumPut(                height, Off+0, "Int"  )
     Off := NumPut(                     1, Off+0, "Ptr"  )
 
@@ -144,9 +163,11 @@ ib_update_instable(force:=false) {
         sp_current := "No latest song found ..."
         sp_current_playing := false
     }
-    spotify_set_icon(sp_current_playing, force)
+    ; spotify_set_icon(sp_current_playing, force)
     
-    info_left := " [ " . get_desktop() . " ]    [ " . sp_current . " ] " . get_dancing(sp_current_playing)
+    info_left := " "
+    info_left .= "[ " . get_desktop() . " ]    "
+    info_left .= "[ " . sp_current . " ] " . get_dancing(sp_current_playing)
     GuiControl,, TheInfoLeft, %info_left%
     
     info_center_left  := space_fill("[ " . get_date() . "  |  " . get_time_icon() . " " . get_time() . " ]", 40)
@@ -154,7 +175,10 @@ ib_update_instable(force:=false) {
     info_center := info_center_left . "  🏃‍♂️  " . info_center_right
     GuiControl,, TheInfoCenter, %info_center%
     
-    info_right := "[ " . ib_str_weather . " ]    [ " . get_disk_space_free_gb("C") . "  |  " . get_ram_usage() . "  |  " . get_cpu_time() . " ]    [ " . get_volume() . " ] "
+    info_right := ""
+    info_right .= "[ " . ib_str_weather . " ]"
+    info_right .= "    [ " . get_disk_space_free_gb("C") . "  |  " . get_ram_usage() . "  |  " . get_cpu_time() . " ]"
+    info_right .= "    [ " . get_volume() . " ] "
     GuiControl,, TheInfoRight, %info_right%
     
     Winset, Alwaysontop, ahk_id %hwnd_info_bar%, A

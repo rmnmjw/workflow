@@ -79,8 +79,8 @@ not_fs_or_fs_idle() {
     return counter == 0
 }
 
-SetTimer, screen_time_periodic, 1000
 screen_time_periodic()
+SetTimer, screen_time_periodic, 1000
 screen_time_periodic(force_save:=false) {
     global TEMP_FILE
     static changes := false, counter := 0, screen_time_start := -1

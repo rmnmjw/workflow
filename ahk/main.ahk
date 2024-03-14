@@ -14,7 +14,7 @@ SetTitleMatchMode, 2
 SetWorkingDir %A_ScriptDir%
 SetWinDelay, 0
 
-Menu, Tray, Icon, icon.png
+Menu, Tray, Icon, main.png
 
 SetCapsLockState, AlwaysOff
 SetNumlockState, AlwaysOn
@@ -22,459 +22,66 @@ SetScrollLockState, AlwaysOff
 
 TEMP_FILE := A_Temp . "\autohotkey.ini"
 
-#include lib/run_as_user.ahk
-#include lib/window_to_bottom_and_activate_topmost.ahk
-; #include screen_time.ahk
-; #include external_timer.ahk
-#include info_bar.ahk
+#include ../ahk-lib/run_as_user.ahk
+#include ../ahk-lib/app.ahk
+#include ../ahk-lib/cursor.ahk
+#include ../ahk-lib/time.ahk
+#include ../ahk-lib/windows_mode_dark_light_toggle.ahk
+#include ../ahk-lib/explorer.ahk
+#include ../ahk-lib/strings.ahk
+#include ../ahk-lib/window.ahk
+#include ../ahk-lib/volume.ahk
+#include ../ahk-lib/tooltip.ahk
+#include ../ahk-lib/zoomit.ahk
+#include ../ahk-lib/brightness.ahk
+#include ../ahk-lib/hibernate.ahk
+#include ../ahk-lib/SlottedCopyPaste.ahk
+; #include info_bar.ahk
 
-; #include lib/benchmark.ahk
-
-key_disabled() {
-    ToolTip, Not mapped
-    Sleep, 500
-    ToolTip
-}
-
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                    Close and Start Programs                   ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-
-SetTimer, restart_program_alt_snap, -1
-restart_program_alt_snap() {
-    Process, WaitClose, AltSnap.exe, 1
-    Process, Close, AltSnap.exe
+SetTimer, launch_programs, -1
+launch_programs() {
     EnvGet, OutputVar, LOCALAPPDATA
-    Run, % OutputVar . "\..\Roaming\AltSnap\AltSnap.exe"
+    app_launch_if_needed("AltSnap.exe", OutputVar . "\..\Roaming\AltSnap\AltSnap.exe", true)
+    app_launch_if_needed("ZoomIt64.exe", A_ScriptDir . "\exec\ZoomIt64.exe")
+    app_launch_if_needed("RBTray.exe", A_ScriptDir . "\exec\RBTray.exe")
 }
 
-SetTimer, restart_program_hide_volume_osd, -1
-restart_program_hide_volume_osd() {
-    Process, WaitClose, HideVolumeOSD.exe, 1
-    Sleep, 1000
-    Process, Close, HideVolumeOSD.exe
-    run_as_user("HideVolumeOSD.exe", "", 0)
-    ; task_bar_reset()
-}
-
-SetTimer, restart_zoom_it, -1
-restart_zoom_it() {
-    Process, WaitClose, ZoomIt64.exe, 1
-    Process, Close, ZoomIt64.exe
-    run_as_user("ZoomIt64.exe", "", 0)
-}
-
-task_bar_reset() {
-    WinExist("ahk_class Shell_TrayWnd")
-    SysGet, s, Monitor
-    
-    WM_ENTERSIZEMOVE := 0x0231
-    WM_EXITSIZEMOVE  := 0x0232
-    
-    SendMessage, WM_ENTERSIZEMOVE
-        WinMove, , , sLeft, sBottom, sRight, 0
-    SendMessage, WM_EXITSIZEMOVE
-    SendMessage, WM_ENTERSIZEMOVE
-        WinMove, , , sLeft, sTop, sRight, 0
-    SendMessage, WM_EXITSIZEMOVE
-}
-
-
-
-
-
-; https://www.autohotkey.com/board/topic/8432-script-for-changing-mouse-pointer-speed/
-cursor_speed_get() {
-    DllCall("SystemParametersInfo", UInt, 0x70, UInt, 0, UIntP, result, UInt, 0) 
-    return result
-}
-cursor_speed_set(speed=6) {
-    speed := Floor(speed)
-    DllCall("SystemParametersInfo", UInt, 0x71, UInt, 0, UInt, speed, UInt, 0) 
-}
-cursor_speed_set()
-
-
-
-
-web_app_refresh(selector) {
-    WinGet WinState, MinMax, %selector%
-    
-    WinActivate, %selector%
-    WinWait, %selector%
-    Send, {F5}
-    
-    if (WinState == -1) {
-        WinMinimize, %selector%
-    }
-    Sleep, 100
-}
-
-; web_app_refresh("WhatsApp ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
-; web_app_refresh("Telegram ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
-; web_app_refresh("Clockodo* ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
-; web_app_refresh("MailHog ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
-; web_app_refresh("Discord ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
-; web_app_refresh("Spotify ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
-; web_app_refresh("Microsoft Teams ahk_class Chrome_WidgetWin_1 ahk_exe brave.exe")
-
-
-
-
-; SysGet, MonitorCount, MonitorCount
-; SysGet, MonitorPrimary, MonitorPrimary
-; SysGet, Monitor, Monitor, 1
-; m_xmin := MonitorLeft
-; m_ymin := MonitorTop
-; m_xmax := MonitorRight
-; m_ymax := MonitorBottom
-; SetTimer, check_monitor, 1000
-; check_monitor() {
-;     global m_xmin, m_ymin, m_xmax, m_ymax
-;     SysGet, Monitor, Monitor, 1
-;     if (m_xmin != MonitorLeft || m_ymin != MonitorTop || m_xmax != MonitorRight || m_ymax != MonitorBottom) {
-;         Reload
-;     }
-; }
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                         Time Functions                        ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-
-time_format(T) { ; based on https://www.autohotkey.com/boards/viewtopic.php?t=77420
-    Local H, M, HH, Q:=60, R:=3600
-    Return Format("{:02}:{:02}:{:02}", H:=T//R, M:=(T:=T-H*R)//Q, T-M*Q, HH:=H, HH*Q+M)
-}
-
-time_diff_sec_abs(a, b:=false) {
-    EnvSub, a, %b%, seconds
-    return Abs(a)
-}
-
-
-
-
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                        Window Functions                       ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-
-WALLPAPER_LIGHT := "C:\Users\rmn\Pictures\wallpaper\crxb103kq5.jpg"
-WALLPAPER_DARK  := "C:\Users\rmn\Pictures\wallpaper\night.png"
-wallpaper_set(light) {
-    global WALLPAPER_LIGHT, WALLPAPER_DARK
-    if (light) {
-        path := WALLPAPER_LIGHT
-    } else {
-        path := WALLPAPER_DARK
-    }
-    RegWrite, REG_SZ, HKEY_CURRENT_USER, Control Panel\Desktop, Wallpaper, %path%
-    
-    loop, 8 {
-        RunWait, %A_WinDir%\System32\RUNDLL32.EXE user32.dll`,UpdatePerUserSystemParameters
-        Sleep, 250
-    }    
-}
-
-
-; https://www.autohotkey.com/boards/viewtopic.php?f=6&t=62701
-window_toggle_app_mode() {
-    RegRead, appMode, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme
-    RegWrite, REG_DWORD, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme, % !appMode
-    wallpaper_set(!appMode)
-}
-
-restore_all_windows() {
-    WinGet, WindowList, List
-    loop %WindowList% {
-        WinUID := WindowList%A_Index%
-        WinGetTitle, WinTitle, ahk_id %WinUID%
-        WinGetClass, WinClass, ahk_id %WinUID%
-        WinGet mm, MinMax, ahk_id %WinUID%
-        if (trim(WinTitle) <> "" and WinClass <> "tooltips_class32" and mm != -1 and mm != 0) {
-            Continue
-        }
-        WinActivate, ahk_id %WinUID% 
-    }
-}
-
-get_focus_name() {
-    ControlGetFocus currentFocus
-    return currentFocus
-}
-
-minimize_current_window() {
-    WinGetClass, t, A
-    if (t == "WorkerW" || t == "AutoHotkeyGUI" || t == "Shell_TrayWnd" || t == "Shell_SecondaryTrayWnd")
-        return
-    WinMinimize, A   
-}
-
-
-
-
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                         Text Functions                        ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-
-; https://www.autohotkey.com/boards/viewtopic.php?t=76052
-generate_random_of(chars, len) {
-    output  := ""
-    loop, %len% {
-        Random, r, 1, StrLen(chars)
-        output .= SubStr(chars, r, 1)
-    }
-    return output
-}
-
-enter_random_string(len) {
-    output  := generate_random_of("0123456789abcdefghijklmnopqrstuvwxyz", len)
-    Send, %output%
-}
-
-enter_random_number(len) {
-    output := generate_random_of("0123456789", len)
-    Send, %output%
-}
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                       Explorer Functions                      ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-
-explorer_restart() {
-    RunWait restart_explorer.bat
-}
-
-
-; https://github.com/GorvGoyl/Autohotkey-Scripts-Windows/blob/master/create_file_here.ahk
-explorer_create_new_file() {
-    WinHWND := WinActive()
-    for win in ComObjCreate("Shell.Application").Windows {
-        if (win.HWND == WinHWND) {
-            dir := SubStr(win.LocationURL, 9) ; remove "file:///"
-            dir := RegExReplace(dir, "%20", " ")
-            break
-        }
-    }
-    
-    InputBox, file_name, New File, Name of the new file
-    file_name := Trim(file_name)
-    if (file_name == "") {
-        return
-    }
-    
-    file := dir . "/" . file_name
-    if (FileExist(file)) {
-        MsgBox, %file_name% already exists
-        return
-    }
-    FileAppend,, %file% 
-}
-
-
-
-
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                             Volume                            ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-
-
-vol_up_down(up) {
-    global vol_win_existing
-    Critical, On
-    SoundSet, 0, Master, mute ; unmute
-    SoundGet, vol
-    vol := Round(0.1 + vol + ((1 + (vol >= 15) + (vol >= 40) + (vol >= 60)) * up))
-    SoundSet, %vol%
-    
-    ib_update_instable()
-
-    Critical, Off
-}
-
-
-
-
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                             Timers                            ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+cursor_speed_set() ; reset to default
 
 SetTimer, close_sublime_nag_windows, 250
 close_sublime_nag_windows() {
     ControlClick, Abbrechen, This is an unregistered copy
 }
 
-
-
-
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                           TurboPaste                          ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-
-tooltip_clear() {
-    SetTimer, tooltip_clear, off
-    ToolTip
-}
-
-class TurboPaste {
-    static buffer := {}
-    
-    copy(key) {
-        Critical, On
-            tmp := Clipboard
-                Send, {Ctrl down}c{Ctrl up}
-                Sleep, 50
-                TurboPaste.buffer[key] := Clipboard
-            Clipboard := tmp
-        Critical, Off
-        
-        copied := TurboPaste.buffer[key]
-        ToolTip, Copy into Buffer %key%
-        SetTimer, tooltip_clear, 700
-    }
-    
-    paste(key) {
-        Critical, On
-            tmp := Clipboard
-                Clipboard := TurboPaste.buffer[key]
-                Send, {Ctrl down}v{Ctrl up}
-                Sleep, 50
-            Clipboard := tmp
-        Critical, Off
-        
-        pasted := TurboPaste.buffer[key]
-        ToolTip, Paste from Buffer %key%
-        SetTimer, tooltip_clear, 700
-    }
-}
-
-
-
-zoomit_zoom := 0
-zoomit_zoom_in() {
-    global zoomit_zoom
-    Critical, On
-    if (zoomit_zoom < 0) {
-        zoomit_zoom := 0
-        cursor_speed_set()
-        ToolTip,
-    }
-    if (WinActive("Zoomit Zoom Window ahk_class ZoomitClass ahk_exe ZoomIt64.exe")) {
-        Send, {WheelUp}
-        zoomit_zoom := zoomit_zoom + 1
-    } else {
-        zoomit_zoom := 1
-        Send, {Ctrl down}{Shift down}{Alt down}z{Alt up}{Shift up}{Ctrl up}
-        Sleep, 100
-    }
-    z := Min(6, Max(1, 6-Round(Abs(zoomit_zoom+1)/1.25)))
-    cursor_speed_set(z)
-    Critical, Off
-}
-zoomit_zoom_out() {
-    global zoomit_zoom
-    Critical, On
-    
-    if (WinActive("Zoomit Zoom Window ahk_class ZoomitClass ahk_exe ZoomIt64.exe")) {
-        Send, {WheelDown}
-        zoomit_zoom := zoomit_zoom - 1
-        if (zoomit_zoom <= 0) {
-            ToolTip, z: %zoomit_zoom%
-        }
-        z := Min(6, Max(1, 6-Round(Abs(zoomit_zoom+1)/1.25)))
-        cursor_speed_set(z)
-        if (zoomit_zoom <= -5) {
-            cursor_speed_set()
-            ToolTip,
-            Send, {Ctrl down}{Shift down}{Alt down}z{Alt up}{Shift up}{Ctrl up}
-        }
-    }
-    Critical, Off
-}
-
-
-
-brightness_set(up) {
-    Critical, On
-    Run, Monitorian.exe /set %up%
-    Sleep, 100
-    Critical, Off
-}
-
-
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
-; ;                                                               ; ;
-; ;                          Key Bindings                         ; ;
-; ;                                                               ; ;
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
-
-#^Tab::Send, {LWin down}{Tab}{LWin up}
 CapsLock::return
-
 
 ; CapsLock is UP
 #If !GetKeyState("CapsLock", "P")
     
-    Volume_Up::vol_up_down(1)
-    Volume_Down::vol_up_down(-1)
-    
-    ~Volume_Mute::
-    ~Media_Next::
-    ~Media_Play_Pause::
-    ~Media_Prev::
-    ~Media_Stop::
-        Sleep, 100
-        ib_update_instable(true)
-    return
-    
-    #0::TurboPaste.paste(0)
-    #1::TurboPaste.paste(1)
-    #2::TurboPaste.paste(2)
-    #3::TurboPaste.paste(3)
-    #4::TurboPaste.paste(4)
-    #5::TurboPaste.paste(5)
-    #6::TurboPaste.paste(6)
-    #7::TurboPaste.paste(7)
-    #8::TurboPaste.paste(8)
-    #9::TurboPaste.paste(9)
+    #0::SlottedCopyPaste.paste(0)
+    #1::SlottedCopyPaste.paste(1)
+    #2::SlottedCopyPaste.paste(2)
+    #3::SlottedCopyPaste.paste(3)
+    #4::SlottedCopyPaste.paste(4)
+    #5::SlottedCopyPaste.paste(5)
+    #6::SlottedCopyPaste.paste(6)
+    #7::SlottedCopyPaste.paste(7)
+    #8::SlottedCopyPaste.paste(8)
+    #9::SlottedCopyPaste.paste(9)
 
     ; !^+a::Winset, Alwaysontop, , A
     
     !^+d::Send, %A_YYYY%-%A_MM%-%A_DD%
     !^+t::Send, %A_Hour%:%A_Min%
     
-    !^+w::enter_random_string(10)
-    !^+s::enter_random_number(1)
+    !^+w::strings_enter_random_text(10)
+    !^+s::strings_enter_random_number(1)
     
     !^+ä::explorer_restart()
     
-    !^+.::window_toggle_app_mode()
-    ~!^+r::
-        Reload
-    Return
+    !^+.::windows_mode_dark_light_toggle()
+    
+    ~!^+r::Reload
 
     !^+o::Run, explorer.exe "C:\Program Files\AutoHotkey\WindowSpy.ahk"
 
@@ -484,87 +91,28 @@ CapsLock::return
         WinActivate, Windows PowerShell
     return
     
-    #q::window_to_bottom_and_activate_topmost()
+    #q::window_current_minimize()
     
-    #w::return
-    
-    #c::Send, {LWin down}{LAlt down}d{LAlt up}{LWin up}
-    #s::Send, {LWin down}n{LWin up}
-    #.::return
-    
+    #w::return ; widgets
+    #s::return ; search
+    #.::return ; emojis
 
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
-
-    toggle_program(selector_in, path) {
-        Critical, On
-        
-        if (selector_in == "__SPOTIFY__") {
-            WinGet, id, list
-            Loop, %id% {
-                this_ID := id%A_Index%
-                WinGet, exe, ProcessName, ahk_id %this_ID%
-                if (exe == "Spotify.exe") {
-                    WinGetClass, clazz, ahk_id %this_ID%
-                    if ((clazz == "Chrome_WidgetWin_0" || clazz == "Chrome_WidgetWin_1")) {
-                        selector := "ahk_id " . this_ID
-                        break
-                    }
-                }
-            }
-        } else {
-            selector := selector_in
-        }
-        
-        dhw := A_DetectHiddenWindows
-        DetectHiddenWindows, On
-            WinGet, WinState, MinMax, %selector%
-            if (WinState == "" || WinState == -1) {
-                Run, %path%
-            } else {
-                if (selector_in == "__SPOTIFY__") {
-                    WinClose, %selector%
-                } else {
-                    WinMinimize, %selector%
-                }
-            }
-        DetectHiddenWindows, %dhw%
-        Critical, Off
-    }
     
-    Numpad0::toggle_program("ahk_class MozillaWindowClass ahk_exe thunderbird.exe", "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Thunderbird.lnk")
-    NumpadEnter::toggle_program("__SPOTIFY__", "C:\Users\rmn\AppData\Local\Microsoft\WindowsApps\Spotify.exe")
-    
-    Numpad3::key_disabled()
-    Numpad4::key_disabled()
-    Numpad5::key_disabled()
-    Numpad6::key_disabled()
-    NumpadMult::key_disabled()
-    NumpadDiv::key_disabled()
-    NumpadSub::key_disabled()
-    
-    
-    #q::minimize_current_window()
-
-
     Volume_Up::brightness_set("+10")
     Volume_Down::brightness_set("-10")
 
-    j::Left
-    k::Up
-    l::Down
-    ö::Right
-    
-    #0::TurboPaste.copy(0)
-    #1::TurboPaste.copy(1)
-    #2::TurboPaste.copy(2)
-    #3::TurboPaste.copy(3)
-    #4::TurboPaste.copy(4)
-    #5::TurboPaste.copy(5)
-    #6::TurboPaste.copy(6)
-    #7::TurboPaste.copy(7)
-    #8::TurboPaste.copy(8)
-    #9::TurboPaste.copy(9)
+    #0::SlottedCopyPaste.copy(0)
+    #1::SlottedCopyPaste.copy(1)
+    #2::SlottedCopyPaste.copy(2)
+    #3::SlottedCopyPaste.copy(3)
+    #4::SlottedCopyPaste.copy(4)
+    #5::SlottedCopyPaste.copy(5)
+    #6::SlottedCopyPaste.copy(6)
+    #7::SlottedCopyPaste.copy(7)
+    #8::SlottedCopyPaste.copy(8)
+    #9::SlottedCopyPaste.copy(9)
     
     q::Send, @
     7::Send, {{}
@@ -581,28 +129,8 @@ CapsLock::return
     WheelUp::zoomit_zoom_in()
     WheelDown::zoomit_zoom_out()
 
-    !^+Up::vol_up_down(1)
-    !^+Down::vol_up_down(-1)
+    !^End::hibernate()
     
-    !^End::
-        i := 0
-        Loop {
-            if (i >= 300) {
-                return
-            }
-            d_CapsLock := GetKeyState("CapsLock", "P")
-            d_Control := GetKeyState("Ctrl")
-            d_Alt := GetKeyState("Alt")
-            if (d_CapsLock || d_Control || d_Alt) {
-                Sleep, 10
-                i += 1
-                Continue
-            }
-            break
-        }
-        Run %a_scriptdir%\_hibernate.ahk
-    return
-
 #If GetKeyState("F14", "P")
     WheelUp::Send, {WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}
     WheelDown::Send, {WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}
@@ -624,10 +152,7 @@ CapsLock::return
 
 #IfWinActive, ahk_class CabinetWClass
     ^+m::explorer_create_new_file()
-    F1::Return
-
-#IfWinActive, ahk_class SunAwtFrame ahk_exe idea64.exe
-    :*:val ::var 
+    F1::return
 
 #IfWinActive, ahk_class PX_WINDOW_CLASS ahk_exe sublime_text.exe
     NumPadDot::Send, .
@@ -642,7 +167,7 @@ CapsLock::return
         Send, {F5}
         
         WinActivate, ahk_id %hwnd%
-    Return
+    return
 
 #IfWinActive, ahk_class SWT_Window0 ahk_exe eclipse.exe
     NumPadDot::Send, .
@@ -660,7 +185,7 @@ CapsLock::return
 #If !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe firefox.exe")
     F13::Send ^w
     
-#If !GetKeyState("CapsLock", "P") and WinActive("ahk_class SUMATRA_PDF_FRAME") and get_focus_name() == ""
+#If !GetKeyState("CapsLock", "P") and WinActive("ahk_class SUMATRA_PDF_FRAME") and window_get_focus_name() == ""
     A::Send {Left}
     D::Send {Right}
     W::Send {Up}
@@ -671,8 +196,6 @@ CapsLock::return
     F13::Send !{f4}
     WheelLeft::Send {Left}
     WheelRight::Send {Right}
-    ; XButton1::Send {Left}
-    ; XButton2::Send {Right}
 
 #If !GetKeyState("CapsLock", "P") and WinActive("ahk_class Photo_Lightweight_Viewer")
     A::Send {Left}
@@ -689,8 +212,6 @@ CapsLock::return
     Esc::Send !{f4}
     F13::Send !{f4}
 
-
-
 #if !GetKeyState("CapsLock", "P") and WinActive("Steam ahk_class SDL_app ahk_exe steamwebhelper.exe")
     F13::Send !{f4}
 
@@ -705,7 +226,7 @@ CapsLock::return
     F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class WorkerW ahk_exe explorer.exe")
-    F1::Return
+    F1::return
 
 #if !GetKeyState("CapsLock", "P") and WinActive("Uhr ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
     F13::Send !{f4}
@@ -761,7 +282,7 @@ CapsLock::return
         Send, {Alt up}
         Sleep, 10
         Send, S
-    Return
+    return
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class ConsoleWindowClass ahk_exe ubuntu.exe")
     F13::WinClose
@@ -814,7 +335,7 @@ CapsLock::return
             MouseClick, L, wx+74, wy+90
             MouseClick, L, wx+74, wy+90
         MouseMove, x, y
-    Return
+    return
     
     ; marker: blue
     F2::
@@ -826,7 +347,7 @@ CapsLock::return
             MouseClick, L, wx+74, wy+90
             MouseClick, L, wx+74, wy+90
         MouseMove, x, y
-    Return
+    return
 
     ; marker: green
     F3::
@@ -838,7 +359,7 @@ CapsLock::return
             MouseClick, L, wx+74, wy+90
             MouseClick, L, wx+74, wy+90
         MouseMove, x, y
-    Return
+    return
 
     ; marker: yellow
     F4::
@@ -850,7 +371,7 @@ CapsLock::return
             MouseClick, L, wx+74, wy+90
             MouseClick, L, wx+74, wy+90
         MouseMove, x, y
-    Return
+    return
     
     ; pen: red
     F5::
@@ -862,7 +383,7 @@ CapsLock::return
             MouseClick, L, wx+193, wy+87
             MouseClick, L, wx+193, wy+87
         MouseMove, x, y
-    Return
+    return
     
     ; pen: blue
     F6::
@@ -874,7 +395,7 @@ CapsLock::return
             MouseClick, L, wx+193, wy+87
             MouseClick, L, wx+193, wy+87
         MouseMove, x, y
-    Return
+    return
     
     ; pen: green
     F7::
@@ -886,7 +407,7 @@ CapsLock::return
             MouseClick, L, wx+193, wy+87
             MouseClick, L, wx+193, wy+87
         MouseMove, x, y
-    Return
+    return
     
     ; pen: yellow
     F8::
@@ -898,7 +419,7 @@ CapsLock::return
             MouseClick, L, wx+193, wy+87
             MouseClick, L, wx+193, wy+87
         MouseMove, x, y
-    Return
+    return
     
     ; eraser
     F9::
@@ -907,7 +428,7 @@ CapsLock::return
         MouseClick, L, wx+74, wy+90
         MouseClick, L, wx+281, wy+90
         MouseMove, x, y
-    Return
+    return
     
     ; text
     F10::
@@ -916,7 +437,7 @@ CapsLock::return
         MouseClick, L, wx+74, wy+90
         MouseClick, L, wx+326, wy+90
         MouseMove, x, y
-    Return
+    return
     
     
     Esc::
@@ -926,7 +447,7 @@ CapsLock::return
         MouseClick, L, wx+326, wy+90
         MouseClick, L, wx+326, wy+90
         MouseMove, x, y
-    Return
+    return
 
 #If !GetKeyState("CapsLock", "P")
 

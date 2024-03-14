@@ -1,4 +1,4 @@
-﻿#include lib/change_any_tray_icon.ahk
+﻿; #include ../ahk-lib/change_any_tray_icon.ahk
 
 space_fill(t, l:=3, f:=" ") {
     r := l-StrLen(t)
@@ -157,7 +157,8 @@ get_time_icon() {
 }
 
 get_time() {
-    if (Mod(Floor(A_TickCount / 1000), 2)) {
+    FormatTime, s,, ss
+    if (Mod(s, 2)) {
         FormatTime, t,, HH:mm:ss
     } else {
         FormatTime, t,, HH mm ss
