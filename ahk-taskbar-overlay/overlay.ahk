@@ -1,55 +1,60 @@
-﻿; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
-;                                                               ; 
-;                          Screen Time                          ;
-;                                                               ; 
-; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; 
+﻿; #include ../ahk-lib/VD.ahk
+; VD.init()
 
 Gui, screen_time:+AlwaysOnTop +ToolWindow -Caption +LastFound
-Gui, screen_time:Font, s10L q5, Segoe UI
+
+if (A_ScreenDPI == 96) {
+    Gui, screen_time:Font, s10L q5, Segoe UI
+} else {
+    Gui, screen_time:Font, s9L q5, Segoe UI
+}
 
 Gui, screen_time:+E0x02000000 +E0x00080000 +E0x20
 
-RegRead, is_light_mode, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme
+RegRead, is_light_mode, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, SystemUsesLightTheme
 
 if (is_light_mode) {
     COLOR_FONT := "18191A"
     COLOR_BG   := "E3EEF9"
 } else {
     COLOR_FONT := "FFFFFF"
-    COLOR_BG   := "1C212B"
+    COLOR_BG   := "202020"
 }
 
-Gui, screen_time:Add, Text, vTop c%COLOR_FONT% x0 y0 w220 left, XXXXX
-Gui, screen_time:Add, Text, vBottom c%COLOR_FONT% x0 y20 w220 left, XXXXX
+; # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+; Gui, screen_time:Add, Text, vScreenTime c%COLOR_FONT% x40 y0 w220 left, YOYOYOYO
+
+Gui, screen_time:Add, Text, vTop        c%COLOR_FONT% x0 y0  w220 left, XXXXX
+Gui, screen_time:Add, Text, vBottom     c%COLOR_FONT% x0 y18 w220 left, XXXXX
+; # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
 Gui, screen_time:Color, %COLOR_BG%
 WinSet, TransColor, %COLOR_BG%
-; Gui, screen_time:Show, x3506 y10 h80 w113 NoActivate
-; Gui, screen_time:Show, x4 y2106 h80 w220 NoActivate
-Gui, screen_time:Show, x7 y2074 h80 w220 NoActivate
 
-string_right := "??:??"
-
-SetTimer, screen_time_hide_on_full_screen, 1000
-screen_time_hide_on_full_screen() {
-    static is_hidden := false
+if (192 == A_ScreenDPI) {
+    ; Gui, screen_time:Show, x80 y0 h80 w500 NoActivate ; 200%
+    ; y := (1080 / 96 * A_ScreenDPI) - 76
+    ; Gui, screen_time:Show, x100 y%y% h80 w500 NoActivate ; 200%
     
-    WinGetClass, clazz, A
-    if ("Progman" == clazz || "WorkerW" == clazz) {
-        fs := false
-    } else {
-        WinGetPos, wx, wy, ww, wh, A
-        fs := wx == 0 && wy == 0 && ww == 3840 && wh == 2160
-    }
-
-    if (fs && !is_hidden) {
-        Gui, screen_time:Hide
-        is_hidden := true
-    } else if (!fs && is_hidden) {
-        Gui, screen_time:Show, NoActivate
-        is_hidden := false
-    }
-    Gui, screen_time:+AlwaysOnTop
+    y := A_ScreenHeight - 82
+    Gui, screen_time:Show, x16 y%y% h80 w500 NoActivate ; 200%
+} else if (144 == A_ScreenDPI) {
+    ; y := A_ScreenHeight - 56
+    ; y := 3
+    ; Gui, screen_time:Show, x100 y%y% h80 w500 NoActivate ; 200%
+    
+    ; 150% bottom win 11
+    y := A_ScreenHeight - 61
+    Gui, screen_time:Show, x10 y%y% h80 w500 NoActivate ; 200%
+} else {
+    Gui, screen_time:Show, x50 y1 h80 w500 NoActivate ; 100%
+    ; y := A_ScreenHeight - 40
+    ; Gui, screen_time:Show, x10 y%y% h80 w500 NoActivate ; 100%
 }
+
+
+Gui, screen_time:+AlwaysOnTop
+
 
 get_clockodo() {
     static counter := 0, ext := 0, last := 0
@@ -127,6 +132,16 @@ timer_secs_to_time(s) {
     return h . ":" . m . ":" . s
 }
 
+; get_screen_time() {
+;     path := "C:\Users\rmn\AppData\Local\digital-wellbeing\dailylogs\" . A_MM . "-" . A_DD . "-" . A_YYYY . ".log"
+;     FileRead, s, %path%
+;     oArray := StrSplit(s, "`n", "`r")
+;     sum := 0
+;     for idx in oArray {
+;         sum += StrSplit(oArray[idx], A_Tab)[2]
+;     }
+;     return timer_secs_to_time(sum)
+; }
 
 
 ; refresh_bottom()
@@ -134,20 +149,59 @@ timer_secs_to_time(s) {
 ; refresh_bottom() {
 ; }
 
-refresh_top()
-SetTimer, refresh_top, 1000
 refresh_top() {
+    static acht = false
     global is_light_mode
     
-    c := get_clockodo()
-    GuiControl, screen_time:, Top, ⏱ %c%
-    e := get_external_timer_diff()
-    GuiControl, screen_time:, Bottom, ⌚ %e%
+    ; if (VD.getCurrentDesktopNum() != 1) {
+    ;     GuiControl, screen_time:, Top
+    ;     GuiControl, screen_time:, Bottom
+    ;     return
+    ; }
     
-    RegRead, is_light_mode_new, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, AppsUseLightTheme
+    c := get_clockodo()
+    
+    x := c > "04:48:00" ? "+" : "" ; min work time
+    GuiControl, screen_time:, Top, ⏱%c%%x%
+    e := get_external_timer_diff()
+    GuiControl, screen_time:, Bottom, ⌚%e%
+    ; s := get_screen_time()
+    ; GuiControl, screen_time:, ScreenTime, 🖥️%s%
+    
+    RegRead, is_light_mode_new, HKCU, Software\Microsoft\Windows\CurrentVersion\Themes\Personalize, SystemUsesLightTheme
     if (is_light_mode != is_light_mode_new)
         Reload
+    
+    if (!acht && c > "08:00:00") {
+        MsgBox, 8 h überschritten
+        acht := true
+    }
 }
+refresh_top()
+SetTimer, refresh_top, 1000
 
+
+
+SetTimer, screen_time_hide_on_full_screen, 1000
+screen_time_hide_on_full_screen() {
+    static is_hidden := false
+    
+    WinGetClass, clazz, A
+    if ("Progman" == clazz || "WorkerW" == clazz) {
+        fs := false
+    } else {
+        WinGetPos, wx, wy, ww, wh, A
+        fs := wx == 0 && wy == 0 && ww == 3840 && wh == 2160
+    }
+
+    if (fs && !is_hidden) {
+        Gui, screen_time:Hide
+        is_hidden := true
+    } else if (!fs && is_hidden) {
+        Gui, screen_time:Show, NoActivate
+        is_hidden := false
+    }
+    Gui, screen_time:+AlwaysOnTop
+}
 
 !^+r::Reload

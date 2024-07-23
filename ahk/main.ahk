@@ -36,7 +36,36 @@ TEMP_FILE := A_Temp . "\autohotkey.ini"
 #include ../ahk-lib/brightness.ahk
 #include ../ahk-lib/hibernate.ahk
 #include ../ahk-lib/SlottedCopyPaste.ahk
+#include ../ahk-lib/window_to_bottom_and_activate_topmost.ahk
+; #include ../ahk-lib/JSON.ahk
 ; #include info_bar.ahk
+
+sublime_merge_change_font_size(plus_minus) {
+    static l = "", rl = "", rr := -1, thepath = ""
+    Critical, On
+    if (rr == -1) {
+        EnvGet, ENV_PATH_APPDATA, LOCALAPPDATA
+        thepath := ENV_PATH_APPDATA . "\..\Roaming\Sublime Merge\Packages\User\Preferences.sublime-settings"
+        FileRead, json, %thepath%
+        json := StrSplit(json, """font_size"":")
+        l := json[1]
+        NEWLINE := CHR(10)
+        r := StrSplit(json[2], NEWLINE)
+        rl := Trim(r[1])
+    }
+    rl += plus_minus
+    if (rl < 1) {
+        rl := 1
+    }
+    output := l . """font_size"": " . rl . NEWLINE . "}"
+    f := FileOpen(thepath, "w")
+    f.Write(output)
+    f.Close()
+    Critical, Off
+}
+
+
+
 
 SetTimer, launch_programs, -1
 launch_programs() {
@@ -52,6 +81,20 @@ SetTimer, close_sublime_nag_windows, 250
 close_sublime_nag_windows() {
     ControlClick, Abbrechen, This is an unregistered copy
 }
+
+SetTimer, winamp_always_on_top, 1000
+winamp_always_on_top() {
+    static selector := "ahk_class Winamp v1.x ahk_exe winamp.exe"
+    WinGetPos, x, y, w, h, %selector%
+    if (y == 20 && h == 78) {
+        WinMove, %selector%, , 198, 2100
+    }
+    Winset, Alwaysontop, On, %selector%
+}
+
+
+
+
 
 CapsLock::return
 
@@ -91,7 +134,8 @@ CapsLock::return
         WinActivate, Windows PowerShell
     return
     
-    #q::window_current_minimize()
+    #q::window_to_bottom_and_activate_topmost()
+    #^q::window_current_minimize()
     
     #w::return ; widgets
     #s::return ; search
@@ -132,8 +176,27 @@ CapsLock::return
     !^End::hibernate()
     
 #If GetKeyState("F14", "P")
-    WheelUp::Send, {WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}
-    WheelDown::Send, {WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}
+    ; WheelUp::Send, {WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}{WheelUp}
+    ; WheelDown::Send, {WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}{WheelDown}
+    f14last := 0
+    WheelUp::
+        f14last := 0
+        Send, {Ctrl down}{WheelUp}{Ctrl up}
+    return
+    
+    WheelDown::
+        f14last := 0
+        Send, {Ctrl down}{WheelDown}{Ctrl up}
+    return
+    
+    
+#if
+    F14 Up::
+        if (A_TimeSincePriorHotkey < 400) and (A_TimeSincePriorHotkey <> -1 and ((A_TickCount - f14last) < 400)) {
+            Send, {Ctrl down}{Numpad0}{Ctrl up}
+        }
+        f14last := A_TickCount
+    return
     
 #If GetKeyState("F15", "P")
     WheelUp::vol_up_down(1)
@@ -156,14 +219,16 @@ CapsLock::return
 
 #IfWinActive, ahk_class PX_WINDOW_CLASS ahk_exe sublime_text.exe
     NumPadDot::Send, .
-
+#IfWinActive, ahk_class #32770 ahk_exe sublime_text.exe
+    F13::Send !{f4}
+    
 #IfWinActive, ahk_class Chrome_WidgetWin_1 ahk_exe Code.exe
     NumPadDot::Send, .
     F5::
         WinGet, hwnd
         
-        WinActivate, ahk_class MozillaWindowClass ahk_exe firefox.exe
-        WinWaitActive, ahk_class MozillaWindowClass ahk_exe firefox.exe
+        WinActivate, Firefox Developer Edition ahk_class MozillaWindowClass ahk_exe firefox.exe
+        WinWaitActive, Firefox Developer Edition ahk_class MozillaWindowClass ahk_exe firefox.exe
         Send, {F5}
         
         WinActivate, ahk_id %hwnd%
@@ -184,6 +249,8 @@ CapsLock::return
 
 #If !GetKeyState("CapsLock", "P") and WinActive("ahk_class MozillaWindowClass ahk_exe firefox.exe")
     F13::Send ^w
+#If !GetKeyState("CapsLock", "P") and WinActive("ahk_class #32770 ahk_exe firefox.exe")
+    F13::Send !{f4}
     
 #If !GetKeyState("CapsLock", "P") and WinActive("ahk_class SUMATRA_PDF_FRAME") and window_get_focus_name() == ""
     A::Send {Left}
@@ -248,6 +315,14 @@ CapsLock::return
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class PX_WINDOW_CLASS ahk_exe sublime_merge.exe")
     F13::Send !{f4}
+    ^+::
+    ^WheelUp::
+        sublime_merge_change_font_size(+1)
+    Return
+    ^WheelDown::sublime_merge_change_font_size(-1)
+    
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class WireGuard UI - Manage Tunnels ahk_exe wireguard.exe")
+    F13::Send !{f4}
     
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class Chrome_WidgetWin_1 ahk_exe Qobuz.exe")
     F13::Send !{f4}
@@ -255,7 +330,7 @@ CapsLock::return
 #if !GetKeyState("CapsLock", "P") and WinActive("Window Spy ahk_exe AutoHotkey.exe")
     F13::Send !{f4}
 
-#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class Chrome_WidgetWin_0 ahk_exe Spotify.exe")
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_exe Spotify.exe") and (WinActive("ahk_class Chrome_WidgetWin_0") or WinActive("ahk_class Chrome_WidgetWin_1"))
     F13::WinClose
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class {97E27FAA-C0B3-4b8e-A693-ED7881E99FC1} ahk_exe foobar2000.exe")
