@@ -139,7 +139,7 @@ CapsLock::return
     
     #w::return ; widgets
     #s::return ; search
-    #.::return ; emojis
+    ; #.::return ; emojis
 
 ; CapsLock is DOWN
 #If GetKeyState("CapsLock", "P")
