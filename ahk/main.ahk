@@ -294,6 +294,10 @@ CapsLock::return
 
 #if !GetKeyState("CapsLock", "P") and WinActive("ahk_class WorkerW ahk_exe explorer.exe")
     F1::return
+    
+#if !GetKeyState("CapsLock", "P") and WinActive("ahk_class Outlook Host ahk_exe olk.exe")
+    ^W::
+    F13::Send !{f4}
 
 #if !GetKeyState("CapsLock", "P") and WinActive("Uhr ahk_class ApplicationFrameWindow ahk_exe ApplicationFrameHost.exe")
     F13::Send !{f4}
